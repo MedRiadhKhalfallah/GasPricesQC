@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- SEO & Meta Tags -->
+  <title>Prix d'essence au Québec en temps réel — Trouvez la station la moins chère</title>
+  <meta name="description" content="Découvrez les prix de l'essence en temps réel au Québec. Trouvez rapidement les stations d'essence les moins chères (Régulier, Super, Diesel) autour de vous ou n'importe où dans la province." />
+  <meta name="keywords" content="prix essence québec, essence au québec en temps réel, station service québec la moins chère, gas price quebec, régulier, super, diesel, carburant québec" />
+  <meta name="author" content="Prix d'essence Québec" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://votre-site-web-quebec-essence.com/" />
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://votre-site-web-quebec-essence.com/" />
+  <meta property="og:title" content="Prix d'essence au Québec en temps réel" />
+  <meta property="og:description" content="Comparez les prix et trouvez la station la moins chère près de chez vous sur une carte interactive." />
+  <meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/5/5f/Flag_of_Quebec.svg" />
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:url" content="https://votre-site-web-quebec-essence.com/" />
+  <meta property="twitter:title" content="Prix d'essence au Québec en temps réel" />
+  <meta property="twitter:description" content="Comparez les prix et trouvez la station la moins chère près de chez vous sur une carte interactive." />
+  <meta property="twitter:image" content="https://upload.wikimedia.org/wikipedia/commons/5/5f/Flag_of_Quebec.svg" />
+
+  <!-- Favicon (Fallback pour le moment) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⛽</text></svg>">
+
+  <!-- JSON-LD Structured Data for Local Business / App -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Prix d'essence Québec",
+    "description": "Application web permettant de trouver en temps réel les stations d'essence les moins chères selon votre position géographique au Québec.",
+    "applicationCategory": "GeographicApplication",
+    "operatingSystem": "All",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "CAD"
+    }
+  }
+  </script>
+
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    body { background-color: #f8f9fa; font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+
+    /* Couleurs officielles du Québec */
+    .bg-quebec { background-color: #0033A0 !important; }
+    .text-quebec { color: #0033A0 !important; }
+    .btn-quebec { background-color: #0033A0; color: white; border: none; }
+    .btn-quebec:hover { background-color: #002277; color: white; }
+    .btn-outline-quebec { border-color: #0033A0; color: #0033A0; }
+    .btn-outline-quebec:hover { background-color: #0033A0; color: white; }
+
+    .card-top { border-bottom: 1px solid #eee; padding-bottom: 0.5rem; margin-bottom: 0.5rem; }
+    .price-text { font-size: 1.5rem; font-weight: 800; color: #d32f2f; }
+    .price-unit { font-size: 0.9rem; font-weight: 500; color: #6c757d; }
+    .rank-badge {
+      width: 28px; height: 28px;
+      display: inline-flex; align-items: center; justify-content: center;
+      border-radius: 50%; font-weight: bold; background-color: #6c757d; color: white;
+    }
+    .rank-badge.top-1 { background-color: #ffd700; color: #000; }
+    .rank-badge.top-2 { background-color: #c0c0c0; color: #000; }
+    .rank-badge.top-3 { background-color: #cd7f32; color: #fff; }
+
+    .quebec-flag-img { height: 40px; border: 1px solid rgba(255,255,255,0.3); border-radius: 2px; }
+  </style>
+</head>
+<body>
+
+<header class="bg-quebec text-white text-center py-4 mb-4 shadow-sm" style="border-bottom: 4px solid #fff;">
+  <div class="container d-flex flex-column align-items-center">
+    <div class="d-flex align-items-center justify-content-center mb-2">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/5/5f/Flag_of_Quebec.svg" alt="Drapeau du Québec" class="quebec-flag-img me-3">
+      <h1 class="h3 fw-bold mb-0">Prix d'essence Québec</h1>
+    </div>
+    <p class="mb-0" style="color: #e6f0ff;">Trouvez les stations les moins chères autour de vous</p>
+  </div>
+</header>
+
+<main class="container mb-5">
+  <!-- SEO Hidden H2 for structure -->
+  <h2 class="visually-hidden">Rechercher et filtrer les stations environnantes</h2>
+
+  <!-- Filtres -->
+  <div class="card shadow-sm mb-4 border-0" style="border-top: 4px solid #0033A0 !important;">
+    <div class="card-body bg-white">
+      <div class="row g-3 align-items-end">
+
+        <!-- Colonne Emplacement -->
+        <div class="col-12 col-md-auto d-flex align-items-end flex-grow-1">
+          <button class="btn btn-outline-quebec w-100" data-bs-toggle="modal" data-bs-target="#locationModal" style="height: calc(100% - 28px); min-height: 40px; margin-bottom: 2px;">
+            <i class="bi bi-geo"></i> Changer d'emplacement
+          </button>
+        </div>
+
+        <!-- Colonne Filtres (Menu déroulant, texte, nombres) -->
+        <div class="col-12 col-md-8">
+          <div class="row g-2">
+            <div class="col-6 col-sm-3">
+              <label for="gasType" class="form-label small fw-bold">Type d'essence</label>
+              <select id="gasType" class="form-select">
+                <option value="Régulier">Régulier</option>
+                <option value="Super">Super</option>
+                <option value="Diesel">Diesel</option>
+              </select>
+            </div>
+
+            <div class="col-6 col-sm-3">
+              <label for="brandFilter" class="form-label small fw-bold">Marque</label>
+              <input type="text" id="brandFilter" class="form-control" placeholder="Ex: Shell..." />
+            </div>
+
+            <div class="col-6 col-sm-3">
+              <label for="radius" class="form-label small fw-bold">Rayon (km)</label>
+              <input type="number" id="radius" class="form-control" value="10" min="1" max="100" />
+            </div>
+
+            <div class="col-6 col-sm-3">
+              <label for="maxResults" class="form-label small fw-bold text-quebec">Max résultats</label>
+              <input type="number" id="maxResults" class="form-control" value="20" min="1" max="100" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Colonne Bouton Recherche (À l'extrême droite, avec hauteur dynamique) -->
+        <div class="col-12 col-md-auto d-flex align-items-end">
+          <button class="btn btn-quebec fw-bold px-4 w-100" id="btnSearch" style="height: calc(100% - 28px); min-height: 40px;">
+            <i class="bi bi-search"></i> Rechercher
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="text-center text-muted small mb-3" id="locationInfo">
+    Position par défaut : 46.3514°N, -72.6070°O
+  </div>
+
+  <div id="status" class="text-center mb-3" aria-live="polite"></div>
+
+  <div id="resultsHeader" class="alert alert-info text-center d-none shadow-sm" role="status"></div>
+
+  <!-- SEO Hidden H2 -->
+  <h2 class="visually-hidden">Résultats des stations d'essence</h2>
+
+  <!-- Liste des résultats -->
+  <div class="row g-3 justify-content-center">
+    <div class="col-12 col-lg-8" id="grid">
+      <!-- Les cartes seront injectées ici -->
+    </div>
+  </div>
+
+</main>
+
+<!-- Modal Emplacement -->
+<div class="modal fade" id="locationModal" tabindex="-1" aria-labelledby="locationModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-quebec text-white">
+        <h5 class="modal-title" id="locationModalLabel"><i class="bi bi-map"></i> Choisir un emplacement</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fermer"></button>
+      </div>
+      <div class="modal-body">
+        <button class="btn btn-outline-primary w-100 mb-3 fw-bold" id="btnGeo" title="Utiliser ma position locale">
+          <i class="bi bi-geo-alt-fill"></i> Me géolocaliser automatiquement
+        </button>
+
+        <div class="mb-3">
+          <label for="citySelect" class="form-label fw-bold text-quebec">Ville rapide</label>
+          <select id="citySelect" class="form-select">
+            <option value="">-- Renseigner des coordonnées personnalisées --</option>
+            <option value="46.8139,-71.2080">Québec</option>
+            <option value="45.5017,-73.5673">Montréal</option>
+            <option value="45.4010,-71.8824">Sherbrooke</option>
+            <option value="46.3430,-72.5436" selected>Trois-Rivières</option>
+            <option value="45.4287,-75.6925">Gatineau</option>
+            <option value="48.4328,-71.0694">Saguenay</option>
+          </select>
+        </div>
+
+        <div id="map" style="height: 300px; width: 100%; border-radius: 6px; border: 1px solid #ccc; z-index: 1;" class="mb-3"></div>
+
+        <div class="row">
+          <div class="col-6">
+            <label for="manualLat" class="form-label small fw-bold">Latitude</label>
+            <input type="number" id="manualLat" class="form-control" step="any" value="46.351368" readonly>
+          </div>
+          <div class="col-6">
+            <label for="manualLng" class="form-label small fw-bold">Longitude</label>
+            <input type="number" id="manualLng" class="form-control" step="any" value="-72.607033" readonly>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer d-flex justify-content-between">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
+        <button type="button" class="btn btn-quebec px-4" id="btnSaveLocation">Valider l'emplacement</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer contextuel SEO -->
+<footer class="bg-dark text-white-50 text-center py-3 mt-4">
+  <div class="container small">
+    <p class="mb-0">Les données sont fournies à titre indicatif selon les informations publiques disponibles pour la province de Québec.</p>
+  </div>
+</footer>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="app.js"></script>
+<!-- Bootstrap 5 JS Bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
