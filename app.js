@@ -1,8 +1,8 @@
 const API_URL = 'https://regieessencequebec.ca/stations.geojson.gz';
 
-// Default position (fallback)
-let userLat = 46.35136828486771;
-let userLng = -72.60703347587304;
+// Variables de position
+let userLat = null;
+let userLng = null;
 
 // ── Haversine distance (km) ─────────────────────────────────────
 function haversine(lat1, lon1, lat2, lon2) {
@@ -115,11 +115,48 @@ function setStatus(html) {
 }
 
 function updateLocationInfo() {
-  document.getElementById('locationInfo').textContent =
-    `Position : ${userLat.toFixed(5)}°N, ${userLng.toFixed(5)}°O`;
+  if (userLat !== null && userLng !== null) {
+    document.getElementById('locationInfo').textContent =
+      `Position actuelle : ${userLat.toFixed(5)}°N, ${userLng.toFixed(5)}°O`;
+  } else {
+    document.getElementById('locationInfo').textContent =
+      "Position inconnue (veuillez vous géolocaliser ou choisir un emplacement).";
+  }
 }
 
-// ── Geolocation ────────────────────────────────────────────────
+// ── Geolocation Automatique au Démarrage ──────────────────────────────────────
+function initGeolocation() {
+  setStatus('<div class="spinner-border text-primary" role="status"></div> <div class="mt-2 text-muted">Recherche de votre position...</div>');
+
+  if (!navigator.geolocation) {
+    setStatus('<div class="alert alert-warning">La géolocalisation n\'est pas supportée par votre navigateur. Veuillez sélectionner une ville manuellement.</div>');
+    // Fallback automatique s'il le faut (ex: Montréal) ou forcer l'utilisateur à choisir.
+    userLat = 45.5017; userLng = -73.5673;
+    updateLocationInfo();
+    search();
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    pos => {
+      userLat = pos.coords.latitude;
+      userLng = pos.coords.longitude;
+      updateLocationInfo();
+      search();
+    },
+    err => {
+      // En cas de refus ou d'erreur, fallback sur Montréal et recherche.
+      console.warn("Erreur géoloc", err);
+      userLat = 45.5017;
+      userLng = -73.5673;
+      updateLocationInfo();
+      setStatus('<div class="alert alert-warning">Géolocalisation bloquée ou introuvable. Affichage des résultats pour Montréal par défaut. Modifiez l\'emplacement si besoin.</div>');
+      search();
+    }
+  );
+}
+
+// ── Geolocation Manuel (Bouton dans Modal) ───────────────────────────────────
 document.getElementById('btnGeo').addEventListener('click', () => {
   const btn = document.getElementById('btnGeo');
   const initialHtml = btn.innerHTML;
@@ -161,13 +198,17 @@ let map, marker;
 
 const locationModalEl = document.getElementById('locationModal');
 locationModalEl.addEventListener('shown.bs.modal', () => {
+  // S'assurer qu'on a au moins une coordonnée à afficher dans la modal
+  const startLat = userLat || 45.5017;
+  const startLng = userLng || -73.5673;
+
   if (!map) {
-    map = L.map('map').setView([userLat, userLng], 12);
+    map = L.map('map').setView([startLat, startLng], 12);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
-    marker = L.marker([userLat, userLng]).addTo(map);
+    marker = L.marker([startLat, startLng]).addTo(map);
 
     map.on('click', function(e) {
       const lat = e.latlng.lat;
@@ -179,11 +220,11 @@ locationModalEl.addEventListener('shown.bs.modal', () => {
     });
   } else {
     map.invalidateSize();
-    map.setView([userLat, userLng], 12);
-    marker.setLatLng([userLat, userLng]);
+    map.setView([startLat, startLng], 12);
+    marker.setLatLng([startLat, startLng]);
   }
-  document.getElementById('manualLat').value = userLat.toFixed(6);
-  document.getElementById('manualLng').value = userLng.toFixed(6);
+  document.getElementById('manualLat').value = startLat.toFixed(6);
+  document.getElementById('manualLng').value = startLng.toFixed(6);
 });
 
 document.getElementById('citySelect').addEventListener('change', (e) => {
@@ -223,6 +264,11 @@ document.getElementById('btnSaveLocation').addEventListener('click', () => {
 document.getElementById('btnSearch').addEventListener('click', search);
 
 async function search() {
+  if (userLat === null || userLng === null) {
+    setStatus('<div class="alert alert-warning">Veuillez d\'abord choisir un emplacement ou autoriser la géolocalisation.</div>');
+    return;
+  }
+
   const radiusKm  = parseFloat(document.getElementById('radius').value) || 10;
   const maxResults = parseInt(document.getElementById('maxResults').value) || 20;
   const gasType = document.getElementById('gasType').value || 'Régulier';
@@ -264,5 +310,5 @@ async function search() {
   }
 }
 
-// Lancer automatiquement au chargement
-search();
+// Lancer la géolocalisation automatiquement au chargement (qui lancera ensuite search)
+initGeolocation();
