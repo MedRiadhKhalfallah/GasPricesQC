@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="sitemap.xsl"?>
+<urlset
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml"
+  xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+
+   <!-- Page d'accueil — Comparateur de prix d'essence -->
+   <url>
+      <loc>https://gas-prices-qc.vercel.app/</loc>
+      <lastmod>2026-04-09</lastmod>
+      <changefreq>daily</changefreq>
+      <priority>1.0</priority>
+      <xhtml:link rel="alternate" hreflang="fr-CA" href="https://gas-prices-qc.vercel.app/" />
+      <xhtml:link rel="alternate" hreflang="x-default" href="https://gas-prices-qc.vercel.app/" />
+      <image:image>
+         <image:loc>https://upload.wikimedia.org/wikipedia/commons/5/5f/Flag_of_Quebec.svg</image:loc>
+         <image:title>Drapeau du Québec — Prix d'essence Québec</image:title>
+         <image:caption>Comparateur de prix d'essence en temps réel pour la province de Québec, Canada</image:caption>
+      </image:image>
+   </url>
+
+   <!-- Politique de confidentialité -->
+   <url>
+      <loc>https://gas-prices-qc.vercel.app/privacy.html</loc>
+      <lastmod>2026-04-09</lastmod>
+      <changefreq>yearly</changefreq>
+      <priority>0.3</priority>
+   </url>
+
+</urlset>

@@ -1,0 +1,38 @@
+{
+  "name": "Prix d'essence Québec — Comparateur en temps réel",
+  "short_name": "Essence QC",
+  "description": "Trouvez les stations d'essence les moins chères au Québec en temps réel. Comparez les prix du carburant Régulier, Super et Diesel près de chez vous parmi plus de 2 300 stations.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f8f9fa",
+  "theme_color": "#0033A0",
+  "lang": "fr-CA",
+  "dir": "ltr",
+  "orientation": "any",
+  "categories": ["utilities", "navigation", "lifestyle"],
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⛽</text></svg>",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Rechercher les stations proches",
+      "short_name": "Rechercher",
+      "description": "Lancer une recherche de stations d'essence à proximité",
+      "url": "/?action=search",
+      "icons": [
+        {
+          "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔍</text></svg>",
+          "sizes": "any",
+          "type": "image/svg+xml"
+        }
+      ]
+    }
+  ]
+}

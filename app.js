@@ -77,37 +77,52 @@ function renderCards(stations) {
     else if (rank === 2) rankClass = 'top-2';
     else if (rank === 3) rankClass = 'top-3';
 
+    const stationName = s.Name ?? 'Station inconnue';
+    const stationBrand = s.brand ?? '—';
+    const stationAddress = s.Address ?? '—';
+    const stationRegion = s.Region ?? '—';
+
     const card = document.createElement('div');
     card.className = 'card shadow-sm mb-3';
+    card.setAttribute('role', 'listitem');
+    card.setAttribute('aria-label', `Station ${stationName} — ${s.price.toFixed(1)}¢/L à ${s.distance_km} km`);
     card.innerHTML = `
       <div class="card-body">
         <div class="card-top d-flex justify-content-between align-items-start">
           <div>
-            <span class="rank-badge ${rankClass} me-2 shadow-sm">${rank}</span>
-            <span class="fw-bold fs-5">${s.Name ?? 'Station inconnue'}</span>
+            <span class="rank-badge ${rankClass} me-2 shadow-sm" aria-label="Position numéro ${rank}">${rank}</span>
+            <span class="fw-bold fs-5">${stationName}</span>
           </div>
-          <span class="badge bg-primary rounded-pill px-3 py-2 shadow-sm">${s.brand ?? '—'}</span>
+          <span class="badge bg-primary rounded-pill px-3 py-2 shadow-sm">${stationBrand}</span>
         </div>
         
         <div class="row align-items-center mt-2">
           <div class="col-md-7 mb-2 mb-md-0">
-            <div class="text-muted small"><i class="bi bi-geo-alt"></i> ${s.Address ?? '—'}</div>
-            <div class="text-muted small"><i class="bi bi-map"></i> ${s.Region ?? '—'} · ${s.PostalCode ?? ''}</div>
+            <div class="text-muted small"><i class="bi bi-geo-alt" aria-hidden="true"></i> ${stationAddress}</div>
+            <div class="text-muted small"><i class="bi bi-map" aria-hidden="true"></i> ${stationRegion} · ${s.PostalCode ?? ''}</div>
             <div class="mt-2"><span class="badge bg-success text-white">${s.Status ?? ''}</span></div>
           </div>
           
           <div class="col-md-5 text-md-end">
-            <div class="price-text">${s.price.toFixed(1)}<span class="price-unit"> ¢/L</span></div>
-            <div class="text-muted small fw-bold mb-2"><i class="bi bi-car-front"></i> ${s.distance_km} km</div>
-            <button class="btn btn-sm btn-outline-secondary w-100" onclick="window.open('https://www.google.com/maps/dir/?api=1&origin=${userLat},${userLng}&destination=${s.coordinates[1]},${s.coordinates[0]}', '_blank')">
-              <i class="bi bi-map"></i> Itinéraire
-            </button>
+            <div class="price-text" aria-label="Prix : ${s.price.toFixed(1)} cents par litre">${s.price.toFixed(1)}<span class="price-unit"> ¢/L</span></div>
+            <div class="text-muted small fw-bold mb-2"><i class="bi bi-car-front" aria-hidden="true"></i> ${s.distance_km} km</div>
+            <a href="https://www.google.com/maps/dir/?api=1&origin=${userLat},${userLng}&destination=${s.coordinates[1]},${s.coordinates[0]}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-secondary w-100" aria-label="Obtenir l'itinéraire vers ${stationName} sur Google Maps" title="Itinéraire Google Maps vers ${stationName}">
+              <i class="bi bi-map" aria-hidden="true"></i> Itinéraire
+            </a>
           </div>
         </div>
       </div>
     `;
     grid.appendChild(card);
   });
+}
+
+// ── SEO : Mise à jour dynamique de la meta description ──────────
+function updateMetaDescription(text) {
+  let meta = document.querySelector('meta[name="description"]');
+  if (meta) {
+    meta.setAttribute('content', text);
+  }
 }
 
 // ── UI helpers ─────────────────────────────────────────────────
@@ -381,6 +396,8 @@ async function search() {
 
     if (stations.length === 0) {
       setStatus(`<div class="alert alert-warning">Aucune station trouvée avec ces critères.</div>`);
+      document.title = "Aucun résultat — Prix d'essence Québec";
+      updateMetaDescription("Aucune station d'essence trouvée avec ces critères. Modifiez vos filtres ou augmentez le rayon de recherche pour trouver des stations au Québec.");
     } else {
       setStatus('');
       const header = document.getElementById('resultsHeader');
@@ -388,6 +405,11 @@ async function search() {
       header.textContent =
         `${stations.length} station(s) trouvée(s) · rayon ${radiusKm} km · triées par prix ↑`;
       renderCards(stations);
+
+      // SEO : mise à jour dynamique du titre de la page et de la meta description
+      const locationLabel = userCity || 'votre position';
+      document.title = `${gasType} dès ${stations[0].price.toFixed(1)}¢/L près de ${locationLabel} — Prix d'essence Québec`;
+      updateMetaDescription(`${stations.length} stations d'essence trouvées près de ${locationLabel}. Meilleur prix ${gasType} : ${stations[0].price.toFixed(1)}¢/L. Comparez les prix en temps réel au Québec.`);
     }
   } catch (err) {
     console.error(err);

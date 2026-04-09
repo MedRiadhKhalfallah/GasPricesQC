@@ -1,0 +1,24 @@
+# robots.txt — Prix d'essence Québec
+# https://gas-prices-qc.vercel.app/
+
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /*.json$
+
+# Autoriser les crawlers à accéder aux fichiers CSS et JS (pour le rendu)
+Allow: /app.js
+Allow: /*.css$
+
+# Sitemaps
+Sitemap: https://gas-prices-qc.vercel.app/sitemap.xml
+
+# Googlebot spécifique
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+# Bingbot spécifique
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 2

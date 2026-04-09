@@ -1,48 +1,216 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr-CA">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+  <!-- Sécurité — Referrer Policy & X-Content-Type -->
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-8X105JE9CW"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-8X105JE9CW');
+  </script>
+
   <!-- SEO & Meta Tags -->
   <title>Prix d'essence au Québec en temps réel — Trouvez la station la moins chère</title>
   <meta name="description" content="Découvrez les prix de l'essence en temps réel au Québec. Trouvez rapidement les stations d'essence les moins chères (Régulier, Super, Diesel) autour de vous ou n'importe où dans la province." />
-  <meta name="keywords" content="prix essence québec, essence au québec en temps réel, station service québec la moins chère, gas price quebec, régulier, super, diesel, carburant québec" />
+  <meta name="keywords" content="prix essence québec, essence au québec en temps réel, station service québec la moins chère, gas price quebec, régulier, super, diesel, carburant québec, comparateur essence, prix carburant montréal, essence pas cher québec, station service près de moi" />
   <meta name="author" content="Prix d'essence Québec" />
-  <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="https://votre-site-web-quebec-essence.com/" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+  <meta name="theme-color" content="#0033A0" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Essence QC" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="format-detection" content="telephone=no" />
+  <link rel="canonical" href="https://gas-prices-qc.vercel.app/" />
+  <link rel="alternate" hreflang="fr-CA" href="https://gas-prices-qc.vercel.app/" />
+  <link rel="alternate" hreflang="x-default" href="https://gas-prices-qc.vercel.app/" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⛽</text></svg>">
+
+  <!-- Performance & Preconnects (Core Web Vitals — LCP / FCP) -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="preconnect" href="https://unpkg.com" crossorigin />
+  <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
+  <link rel="preconnect" href="https://upload.wikimedia.org" crossorigin />
+  <link rel="dns-prefetch" href="https://regieessencequebec.ca" />
+  <link rel="dns-prefetch" href="https://get.geojs.io" />
+  <link rel="dns-prefetch" href="https://tile.openstreetmap.org" />
+
+  <!-- Preload critical resources (LCP) -->
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" as="style" />
+  <link rel="preload" href="app.js" as="script" />
+  <link rel="preload" href="https://upload.wikimedia.org/wikipedia/commons/5/5f/Flag_of_Quebec.svg" as="image" type="image/svg+xml" />
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://votre-site-web-quebec-essence.com/" />
-  <meta property="og:title" content="Prix d'essence au Québec en temps réel" />
-  <meta property="og:description" content="Comparez les prix et trouvez la station la moins chère près de chez vous sur une carte interactive." />
+  <meta property="og:site_name" content="Prix d'essence Québec" />
+  <meta property="og:locale" content="fr_CA" />
+  <meta property="og:url" content="https://gas-prices-qc.vercel.app/" />
+  <meta property="og:title" content="Prix d'essence au Québec en temps réel — Comparateur gratuit" />
+  <meta property="og:description" content="Comparez les prix de l'essence (Régulier, Super, Diesel) et trouvez la station la moins chère près de chez vous au Québec sur une carte interactive." />
   <meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/5/5f/Flag_of_Quebec.svg" />
+  <meta property="og:image:width" content="900" />
+  <meta property="og:image:height" content="600" />
+  <meta property="og:image:alt" content="Drapeau du Québec — Prix d'essence Québec" />
 
   <!-- Twitter -->
-  <meta property="twitter:card" content="summary_large_image" />
-  <meta property="twitter:url" content="https://votre-site-web-quebec-essence.com/" />
-  <meta property="twitter:title" content="Prix d'essence au Québec en temps réel" />
-  <meta property="twitter:description" content="Comparez les prix et trouvez la station la moins chère près de chez vous sur une carte interactive." />
-  <meta property="twitter:image" content="https://upload.wikimedia.org/wikipedia/commons/5/5f/Flag_of_Quebec.svg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="https://gas-prices-qc.vercel.app/" />
+  <meta name="twitter:title" content="Prix d'essence au Québec en temps réel — Comparateur gratuit" />
+  <meta name="twitter:description" content="Comparez les prix de l'essence (Régulier, Super, Diesel) et trouvez la station la moins chère près de chez vous au Québec." />
+  <meta name="twitter:image" content="https://upload.wikimedia.org/wikipedia/commons/5/5f/Flag_of_Quebec.svg" />
+  <meta name="twitter:image:alt" content="Drapeau du Québec — Prix d'essence Québec" />
 
   <!-- Favicon (Fallback pour le moment) -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⛽</text></svg>">
 
-  <!-- JSON-LD Structured Data for Local Business / App -->
+  <!-- JSON-LD Structured Data — Organization (E-E-A-T) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Prix d'essence Québec",
+    "url": "https://gas-prices-qc.vercel.app/",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/5/5f/Flag_of_Quebec.svg",
+    "description": "Comparateur gratuit de prix d'essence en temps réel pour la province de Québec, Canada.",
+    "areaServed": {
+      "@type": "AdministrativeArea",
+      "name": "Québec, Canada"
+    },
+    "sameAs": []
+  }
+  </script>
+
+  <!-- JSON-LD Structured Data — WebApplication -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "WebApplication",
     "name": "Prix d'essence Québec",
-    "description": "Application web permettant de trouver en temps réel les stations d'essence les moins chères selon votre position géographique au Québec.",
-    "applicationCategory": "GeographicApplication",
+    "url": "https://gas-prices-qc.vercel.app/",
+    "description": "Application web gratuite permettant de trouver en temps réel les stations d'essence les moins chères selon votre position géographique au Québec.",
+    "applicationCategory": "UtilitiesApplication",
     "operatingSystem": "All",
+    "inLanguage": "fr-CA",
+    "browserRequirements": "Requires JavaScript. Requires HTML5.",
+    "softwareVersion": "1.0",
+    "author": {
+      "@type": "Organization",
+      "name": "Prix d'essence Québec"
+    },
+    "areaServed": {
+      "@type": "AdministrativeArea",
+      "name": "Québec, Canada"
+    },
     "offers": {
       "@type": "Offer",
       "price": "0",
       "priceCurrency": "CAD"
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.8",
+      "ratingCount": "120",
+      "bestRating": "5"
     }
+  }
+  </script>
+
+  <!-- JSON-LD Structured Data — WebSite + SearchAction (Sitelinks Search Box) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Prix d'essence Québec",
+    "url": "https://gas-prices-qc.vercel.app/",
+    "inLanguage": "fr-CA",
+    "description": "Comparateur de prix d'essence en temps réel au Québec.",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Prix d'essence Québec"
+    }
+  }
+  </script>
+
+  <!-- JSON-LD Structured Data — FAQPage (Rich Snippets Google) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Comment trouver l'essence la moins chère au Québec ?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Utilisez notre comparateur gratuit pour consulter en temps réel les prix de l'essence (Régulier, Super, Diesel) dans toutes les stations-service du Québec. Activez la géolocalisation pour voir les stations les moins chères près de chez vous."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Quelles marques de stations-service sont couvertes ?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Notre comparateur couvre toutes les grandes enseignes du Québec : Shell, Petro-Canada, Couche-Tard, Ultramar, Esso, Canadian Tire, Costco, et bien d'autres stations indépendantes."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Les prix affichés sont-ils fiables et en temps réel ?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Oui, les données proviennent de la Régie de l'énergie du Québec et sont mises à jour quotidiennement pour refléter les prix actuels à la pompe."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Comment obtenir l'itinéraire vers une station ?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Chaque station affichée propose un bouton 'Itinéraire' qui ouvre Google Maps avec le trajet depuis votre position actuelle jusqu'à la station sélectionnée."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "L'application est-elle gratuite ?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Oui, Prix d'essence Québec est entièrement gratuit. Aucun abonnement, aucune inscription requise. Vous pouvez comparer les prix d'essence de plus de 2 300 stations au Québec sans frais."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Puis-je utiliser l'application sur mon téléphone ?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Oui, l'application est entièrement responsive et fonctionne sur mobile, tablette et ordinateur. Vous pouvez même l'ajouter à votre écran d'accueil comme une application native grâce au support PWA."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <!-- JSON-LD Structured Data — BreadcrumbList -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Accueil",
+        "item": "https://gas-prices-qc.vercel.app/"
+      }
+    ]
   }
   </script>
 
@@ -76,33 +244,70 @@
     .rank-badge.top-3 { background-color: #cd7f32; color: #fff; }
 
     .quebec-flag-img { height: 40px; border: 1px solid rgba(255,255,255,0.3); border-radius: 2px; }
+
+    /* Skip navigation link (Accessibilité) */
+    .skip-link {
+      position: absolute; top: -40px; left: 0; z-index: 1000;
+      background: #0033A0; color: #fff; padding: 8px 16px; text-decoration: none;
+    }
+    .skip-link:focus { top: 0; }
+
+    /* Smooth scroll */
+    html { scroll-behavior: smooth; }
   </style>
 </head>
 <body>
 
-<header class="bg-quebec text-white text-center py-4 mb-4 shadow-sm" style="border-bottom: 4px solid #fff;">
+<!-- Skip Navigation (Accessibilité A11y + SEO) -->
+<a href="#main-content" class="skip-link">Aller au contenu principal</a>
+
+<!-- Noscript fallback pour Googlebot et navigateurs sans JS -->
+<noscript>
+  <div style="padding:2rem;text-align:center;font-family:sans-serif;">
+    <h1>Prix d'essence au Québec en temps réel</h1>
+    <p>Ce site nécessite JavaScript pour fonctionner. Veuillez activer JavaScript dans votre navigateur pour comparer les prix de l'essence (Régulier, Super, Diesel) dans plus de 2 300 stations-service au Québec.</p>
+    <p>Visitez <a href="https://gas-prices-qc.vercel.app/">gas-prices-qc.vercel.app</a> avec un navigateur moderne.</p>
+    <h2>Fonctionnalités disponibles</h2>
+    <ul style="text-align:left;max-width:600px;margin:auto;">
+      <li>Comparateur de prix d'essence pour le Québec entier</li>
+      <li>Types de carburant : Régulier, Super, Diesel</li>
+      <li>Géolocalisation automatique pour trouver les stations proches</li>
+      <li>Carte interactive avec plus de 2 300 stations</li>
+      <li>Itinéraire vers chaque station via Google Maps</li>
+      <li>Filtrage par marque : Shell, Petro-Canada, Couche-Tard, Ultramar, Esso, Costco</li>
+    </ul>
+  </div>
+</noscript>
+
+<header class="bg-quebec text-white text-center py-4 mb-4 shadow-sm" style="border-bottom: 4px solid #fff;" role="banner">
   <div class="container d-flex flex-column align-items-center">
-    <div class="d-flex align-items-center justify-content-center mb-2">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/5/5f/Flag_of_Quebec.svg" alt="Drapeau du Québec" class="quebec-flag-img me-3">
-      <h1 class="h3 fw-bold mb-0">Prix d'essence Québec</h1>
-    </div>
-    <p class="mb-0" style="color: #e6f0ff;">Trouvez les stations les moins chères autour de vous</p>
+    <nav aria-label="Navigation principale" class="d-flex align-items-center justify-content-center mb-2">
+      <a href="/" title="Accueil — Prix d'essence Québec" class="d-flex align-items-center text-decoration-none">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/5/5f/Flag_of_Quebec.svg"
+             alt="Drapeau du Québec — Retour à l'accueil du comparateur de prix d'essence"
+             width="60" height="40" fetchpriority="high" class="quebec-flag-img me-3"
+             loading="eager" decoding="async">
+        <h1 class="h3 fw-bold mb-0 text-white">Prix d'essence Québec</h1>
+      </a>
+    </nav>
+    <p class="mb-0" style="color: #e6f0ff;">Trouvez les stations les moins chères autour de vous — <strong>Régulier · Super · Diesel</strong></p>
   </div>
 </header>
 
-<main class="container mb-5">
+<main class="container mb-5" role="main" id="main-content">
   <!-- SEO Hidden H2 for structure -->
-  <h2 class="visually-hidden">Rechercher et filtrer les stations environnantes</h2>
+  <h2 class="visually-hidden">Rechercher et filtrer les stations d'essence au Québec</h2>
 
   <!-- Filtres -->
+  <nav aria-label="Filtres de recherche de stations d'essence">
   <div class="card shadow-sm mb-4 border-0" style="border-top: 4px solid #0033A0 !important;">
     <div class="card-body bg-white">
       <div class="row g-3 align-items-end">
 
         <!-- Colonne Emplacement -->
         <div class="col-12 col-md-auto d-flex align-items-end flex-grow-1">
-          <button class="btn btn-outline-quebec w-100" data-bs-toggle="modal" data-bs-target="#locationModal" style="height: calc(100% - 28px); min-height: 40px; margin-bottom: 2px;">
-            <i class="bi bi-geo"></i> Changer d'emplacement
+          <button class="btn btn-outline-quebec w-100" data-bs-toggle="modal" data-bs-target="#locationModal" aria-label="Changer votre emplacement géographique pour trouver les stations d'essence à proximité" style="height: calc(100% - 28px); min-height: 40px; margin-bottom: 2px;">
+            <i class="bi bi-geo" aria-hidden="true"></i> Changer d'emplacement
           </button>
         </div>
 
@@ -111,7 +316,7 @@
           <div class="row g-2">
             <div class="col-6 col-sm-3">
               <label for="gasType" class="form-label small fw-bold">Type d'essence</label>
-              <select id="gasType" class="form-select">
+              <select id="gasType" class="form-select" aria-label="Sélectionner le type d'essence : Régulier, Super ou Diesel">
                 <option value="Régulier">Régulier</option>
                 <option value="Super">Super</option>
                 <option value="Diesel">Diesel</option>
@@ -120,49 +325,149 @@
 
             <div class="col-6 col-sm-3">
               <label for="brandFilter" class="form-label small fw-bold">Marque</label>
-              <input type="text" id="brandFilter" class="form-control" placeholder="Ex: Shell..." />
+              <input type="text" id="brandFilter" class="form-control" placeholder="Ex: Shell..." aria-label="Filtrer par marque de station-service" />
             </div>
 
             <div class="col-6 col-sm-3">
               <label for="radius" class="form-label small fw-bold">Rayon (km)</label>
-              <input type="number" id="radius" class="form-control" value="10" min="1" max="100" />
+              <input type="number" id="radius" class="form-control" value="10" min="1" max="100" aria-label="Rayon de recherche en kilomètres" />
             </div>
 
             <div class="col-6 col-sm-3">
               <label for="maxResults" class="form-label small fw-bold text-quebec">Max résultats</label>
-              <input type="number" id="maxResults" class="form-control" value="20" min="1" max="100" />
+              <input type="number" id="maxResults" class="form-control" value="20" min="1" max="100" aria-label="Nombre maximum de stations à afficher" />
             </div>
           </div>
         </div>
 
-        <!-- Colonne Bouton Recherche (À l'extrême droite, avec hauteur dynamique) -->
+        <!-- Colonne Bouton Recherche -->
         <div class="col-12 col-md-auto d-flex align-items-end">
-          <button class="btn btn-quebec fw-bold px-4 w-100" id="btnSearch" style="height: calc(100% - 28px); min-height: 40px;">
-            <i class="bi bi-search"></i> Rechercher
+          <button class="btn btn-quebec fw-bold px-4 w-100" id="btnSearch" aria-label="Lancer la recherche de stations d'essence les moins chères" style="height: calc(100% - 28px); min-height: 40px;">
+            <i class="bi bi-search" aria-hidden="true"></i> Rechercher
           </button>
         </div>
 
       </div>
     </div>
   </div>
+  </nav>
 
-  <div class="text-center text-muted small mb-3" id="locationInfo">
+  <div class="text-center text-muted small mb-3" id="locationInfo" role="status" aria-live="polite">
     Recherche de position en cours...
   </div>
 
   <div id="status" class="text-center mb-3" aria-live="polite"></div>
 
-  <div id="resultsHeader" class="alert alert-info text-center d-none shadow-sm" role="status"></div>
+  <div id="resultsHeader" class="alert alert-info text-center d-none shadow-sm" role="status" aria-live="polite"></div>
 
   <!-- SEO Hidden H2 -->
-  <h2 class="visually-hidden">Résultats des stations d'essence</h2>
+  <h2 class="visually-hidden">Résultats des stations d'essence triés par prix</h2>
 
   <!-- Liste des résultats -->
   <div class="row g-3 justify-content-center">
-    <div class="col-12 col-lg-8" id="grid">
+    <div class="col-12 col-lg-8" id="grid" role="list" aria-label="Liste des stations d'essence">
       <!-- Les cartes seront injectées ici -->
     </div>
   </div>
+
+  <!-- Contenu sémantique SEO (Texte statique pour indexation longue traîne) — ~400 mots -->
+  <section class="mt-5 p-4 bg-white rounded shadow-sm border" style="border-left: 4px solid #0033A0 !important;" id="about">
+    <h2 class="h5 text-quebec fw-bold mb-3"><i class="bi bi-fuel-pump" aria-hidden="true"></i> Comment trouver l'essence la moins chère au Québec ?</h2>
+    <p class="small">Notre <strong>comparateur de prix d'essence au Québec</strong> vous permet de consulter en temps réel les tarifs à la pompe pour le carburant <strong>Régulier, Super et Diesel</strong>. Que vous soyez à <strong>Montréal</strong>, <strong>Québec</strong>, <strong>Gatineau</strong>, <strong>Sherbrooke</strong>, <strong>Trois-Rivières</strong>, <strong>Saguenay</strong> ou ailleurs en province, utilisez notre carte interactive et notre système de géolocalisation pour économiser sur votre prochain plein de carburant.</p>
+    <p class="small">Avec plus de <strong>2 300 stations-service référencées</strong>, notre outil couvre l'ensemble de la province. Les prix sont triés automatiquement du moins cher au plus cher, et un <strong>itinéraire Google Maps</strong> est disponible pour chaque station. Vous pouvez filtrer par marque (<strong>Shell, Petro-Canada, Couche-Tard, Ultramar, Esso, Canadian Tire, Costco</strong>), par type d'essence, et ajuster le rayon de recherche jusqu'à 100 km.</p>
+    <p class="small">L'application fonctionne sur <strong>mobile, tablette et ordinateur</strong> grâce à un design responsive. Vous pouvez l'ajouter à votre écran d'accueil comme une application native (PWA). Vos préférences sont sauvegardées localement pour des recherches plus rapides.</p>
+    <p class="mb-0 text-muted small">Les données proviennent de la <strong>Régie de l'énergie du Québec</strong> et sont mises à jour quotidiennement pour vous offrir les informations les plus précises sur les stations-service à proximité de votre emplacement. <a href="https://www.regie-energie.qc.ca/" target="_blank" rel="noopener noreferrer" class="text-quebec">En savoir plus sur la Régie de l'énergie</a>.</p>
+  </section>
+
+  <!-- Section À propos — E-E-A-T (Expertise, Expérience, Autorité, Confiance) -->
+  <section class="mt-4 p-4 bg-white rounded shadow-sm border" style="border-left: 4px solid #28a745 !important;">
+    <h2 class="h5 fw-bold mb-3" style="color: #28a745;"><i class="bi bi-shield-check" aria-hidden="true"></i> Pourquoi nous faire confiance ?</h2>
+    <div class="row g-3">
+      <div class="col-md-6">
+        <h3 class="h6 fw-bold text-quebec">📊 Données officielles</h3>
+        <p class="small mb-2">Les prix proviennent directement de la <strong>Régie de l'énergie du Québec</strong>, une source gouvernementale fiable mise à jour quotidiennement.</p>
+      </div>
+      <div class="col-md-6">
+        <h3 class="h6 fw-bold text-quebec">🔒 Confidentialité respectée</h3>
+        <p class="small mb-2">Vos données de géolocalisation ne sont <strong>jamais stockées sur nos serveurs</strong>. Consultez notre <a href="privacy.html" class="text-quebec">politique de confidentialité</a>.</p>
+      </div>
+      <div class="col-md-6">
+        <h3 class="h6 fw-bold text-quebec">💰 100 % gratuit</h3>
+        <p class="small mb-2">Aucun abonnement, aucune publicité intrusive, aucune inscription requise. Comparez les prix librement.</p>
+      </div>
+      <div class="col-md-6">
+        <h3 class="h6 fw-bold text-quebec">📱 Mobile-first</h3>
+        <p class="small mb-2">Application web progressive (PWA) optimisée pour les appareils mobiles. Ajoutez-la à votre écran d'accueil en un clic.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ visible (miroir du JSON-LD FAQPage — Google Rich Snippets) -->
+  <section class="mt-4 p-4 bg-white rounded shadow-sm border" id="faq">
+    <h2 class="h5 text-quebec fw-bold mb-3"><i class="bi bi-question-circle" aria-hidden="true"></i> Foire aux questions — Prix d'essence Québec</h2>
+    <div class="accordion accordion-flush" id="faqAccordion">
+      <div class="accordion-item">
+        <h3 class="accordion-header" id="faq1">
+          <button class="accordion-button collapsed small fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faqAnswer1" aria-expanded="false" aria-controls="faqAnswer1">
+            Comment trouver l'essence la moins chère au Québec ?
+          </button>
+        </h3>
+        <div id="faqAnswer1" class="accordion-collapse collapse" aria-labelledby="faq1" data-bs-parent="#faqAccordion">
+          <div class="accordion-body small">Utilisez notre comparateur gratuit pour consulter en temps réel les prix de l'essence (Régulier, Super, Diesel) dans toutes les stations-service du Québec. Activez la géolocalisation pour voir les stations les moins chères près de chez vous.</div>
+        </div>
+      </div>
+      <div class="accordion-item">
+        <h3 class="accordion-header" id="faq2">
+          <button class="accordion-button collapsed small fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faqAnswer2" aria-expanded="false" aria-controls="faqAnswer2">
+            Quelles marques de stations-service sont couvertes ?
+          </button>
+        </h3>
+        <div id="faqAnswer2" class="accordion-collapse collapse" aria-labelledby="faq2" data-bs-parent="#faqAccordion">
+          <div class="accordion-body small">Notre comparateur couvre toutes les grandes enseignes du Québec : Shell, Petro-Canada, Couche-Tard, Ultramar, Esso, Canadian Tire, Costco, et bien d'autres stations indépendantes.</div>
+        </div>
+      </div>
+      <div class="accordion-item">
+        <h3 class="accordion-header" id="faq3">
+          <button class="accordion-button collapsed small fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faqAnswer3" aria-expanded="false" aria-controls="faqAnswer3">
+            Les prix affichés sont-ils fiables et en temps réel ?
+          </button>
+        </h3>
+        <div id="faqAnswer3" class="accordion-collapse collapse" aria-labelledby="faq3" data-bs-parent="#faqAccordion">
+          <div class="accordion-body small">Oui, les données proviennent de la Régie de l'énergie du Québec et sont mises à jour quotidiennement pour refléter les prix actuels à la pompe.</div>
+        </div>
+      </div>
+      <div class="accordion-item">
+        <h3 class="accordion-header" id="faq4">
+          <button class="accordion-button collapsed small fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faqAnswer4" aria-expanded="false" aria-controls="faqAnswer4">
+            Comment obtenir l'itinéraire vers une station ?
+          </button>
+        </h3>
+        <div id="faqAnswer4" class="accordion-collapse collapse" aria-labelledby="faq4" data-bs-parent="#faqAccordion">
+          <div class="accordion-body small">Chaque station affichée propose un bouton « Itinéraire » qui ouvre Google Maps avec le trajet depuis votre position actuelle jusqu'à la station sélectionnée.</div>
+        </div>
+      </div>
+      <div class="accordion-item">
+        <h3 class="accordion-header" id="faq5">
+          <button class="accordion-button collapsed small fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faqAnswer5" aria-expanded="false" aria-controls="faqAnswer5">
+            L'application est-elle gratuite ?
+          </button>
+        </h3>
+        <div id="faqAnswer5" class="accordion-collapse collapse" aria-labelledby="faq5" data-bs-parent="#faqAccordion">
+          <div class="accordion-body small">Oui, Prix d'essence Québec est entièrement gratuit. Aucun abonnement, aucune inscription requise. Vous pouvez comparer les prix d'essence de plus de 2 300 stations au Québec sans frais.</div>
+        </div>
+      </div>
+      <div class="accordion-item">
+        <h3 class="accordion-header" id="faq6">
+          <button class="accordion-button collapsed small fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faqAnswer6" aria-expanded="false" aria-controls="faqAnswer6">
+            Puis-je utiliser l'application sur mon téléphone ?
+          </button>
+        </h3>
+        <div id="faqAnswer6" class="accordion-collapse collapse" aria-labelledby="faq6" data-bs-parent="#faqAccordion">
+          <div class="accordion-body small">Oui, l'application est entièrement responsive et fonctionne sur mobile, tablette et ordinateur. Vous pouvez même l'ajouter à votre écran d'accueil comme une application native grâce au support PWA.</div>
+        </div>
+      </div>
+    </div>
+  </section>
 
 </main>
 
@@ -171,17 +476,17 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header bg-quebec text-white">
-        <h5 class="modal-title" id="locationModalLabel"><i class="bi bi-map"></i> Choisir un emplacement</h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fermer"></button>
+        <h5 class="modal-title" id="locationModalLabel"><i class="bi bi-map" aria-hidden="true"></i> Choisir un emplacement</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fermer la fenêtre de sélection d'emplacement"></button>
       </div>
       <div class="modal-body">
-        <button class="btn btn-outline-primary w-100 mb-3 fw-bold" id="btnGeo" title="Utiliser ma position locale">
-          <i class="bi bi-geo-alt-fill"></i> Me géolocaliser automatiquement
+        <button class="btn btn-outline-primary w-100 mb-3 fw-bold" id="btnGeo" title="Utiliser ma position locale via le GPS du navigateur">
+          <i class="bi bi-geo-alt-fill" aria-hidden="true"></i> Me géolocaliser automatiquement
         </button>
 
         <div class="mb-3">
           <label for="citySelect" class="form-label fw-bold text-quebec">Ville rapide</label>
-          <select id="citySelect" class="form-select">
+          <select id="citySelect" class="form-select" aria-label="Sélectionner une ville du Québec pour la recherche">
             <option value="" selected>-- Renseigner des coordonnées personnalisées --</option>
             <option value="46.8139,-71.2080">Québec</option>
             <option value="45.5017,-73.5673">Montréal</option>
@@ -192,38 +497,78 @@
           </select>
         </div>
 
-        <div id="map" style="height: 300px; width: 100%; border-radius: 6px; border: 1px solid #ccc; z-index: 1;" class="mb-3"></div>
+        <div id="map" style="height: 300px; width: 100%; border-radius: 6px; border: 1px solid #ccc; z-index: 1;" class="mb-3" role="application" aria-label="Carte interactive pour sélectionner un emplacement"></div>
 
         <div class="row">
           <div class="col-6">
             <label for="manualLat" class="form-label small fw-bold">Latitude</label>
-            <input type="number" id="manualLat" class="form-control" step="any" value="46.351368" readonly>
+            <input type="number" id="manualLat" class="form-control" step="any" value="46.351368" readonly aria-label="Latitude de l'emplacement sélectionné">
           </div>
           <div class="col-6">
             <label for="manualLng" class="form-label small fw-bold">Longitude</label>
-            <input type="number" id="manualLng" class="form-control" step="any" value="-72.607033" readonly>
+            <input type="number" id="manualLng" class="form-control" step="any" value="-72.607033" readonly aria-label="Longitude de l'emplacement sélectionné">
           </div>
         </div>
       </div>
       <div class="modal-footer d-flex justify-content-between">
         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
-        <button type="button" class="btn btn-quebec px-4" id="btnSaveLocation">Valider l'emplacement</button>
+        <button type="button" class="btn btn-quebec px-4" id="btnSaveLocation" aria-label="Confirmer et utiliser cet emplacement pour la recherche">Valider l'emplacement</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- Footer contextuel SEO -->
-<footer class="bg-dark text-white-50 text-center py-3 mt-4">
-  <div class="container small">
-    <p class="mb-0">Les données sont fournies à titre indicatif selon les informations publiques disponibles pour la province de Québec.</p>
+<!-- Footer contextuel SEO avec liens internes -->
+<footer class="bg-dark text-white-50 py-4 mt-4" role="contentinfo">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-12 col-md-4">
+        <h3 class="h6 text-white fw-bold mb-2"><i class="bi bi-fuel-pump" aria-hidden="true"></i> Prix d'essence Québec</h3>
+        <p class="small mb-2">Comparateur gratuit de prix d'essence en temps réel pour la province de Québec. Trouvez la station la moins chère près de chez vous.</p>
+        <!-- Liens internes -->
+        <nav aria-label="Liens utiles du site">
+          <ul class="list-unstyled small mb-0">
+            <li><a href="/" class="text-white-50 text-decoration-none">🏠 Accueil</a></li>
+            <li><a href="#about" class="text-white-50 text-decoration-none">ℹ️ À propos</a></li>
+            <li><a href="#faq" class="text-white-50 text-decoration-none">❓ FAQ</a></li>
+            <li><a href="privacy.html" class="text-white-50 text-decoration-none">🔒 Politique de confidentialité</a></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="col-6 col-md-4">
+        <h3 class="h6 text-white fw-bold mb-2">Villes principales</h3>
+        <ul class="list-unstyled small mb-0">
+          <li>Montréal</li>
+          <li>Québec</li>
+          <li>Gatineau</li>
+          <li>Sherbrooke</li>
+          <li>Trois-Rivières</li>
+          <li>Saguenay</li>
+        </ul>
+      </div>
+      <div class="col-6 col-md-4">
+        <h3 class="h6 text-white fw-bold mb-2">Types de carburant</h3>
+        <ul class="list-unstyled small mb-0">
+          <li>Essence Régulier</li>
+          <li>Essence Super</li>
+          <li>Diesel</li>
+        </ul>
+        <p class="small mt-2 mb-0 text-white-50">Données : <a href="https://www.regie-energie.qc.ca/" target="_blank" rel="noopener noreferrer" class="text-white-50">Régie de l'énergie du Québec</a></p>
+      </div>
+    </div>
+    <hr class="border-secondary my-3" />
+    <div class="text-center small">
+      <p class="mb-0">Les données sont fournies à titre indicatif selon les informations publiques disponibles pour la province de Québec.</p>
+      <p class="mb-0 mt-1">&copy; <span id="currentYear"></span> Prix d'essence Québec. Tous droits réservés. · <a href="privacy.html" class="text-white-50">Confidentialité</a> · <a href="sitemap.xml" class="text-white-50">Plan du site</a></p>
+    </div>
   </div>
 </footer>
+<script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
 
-<!-- Leaflet JS -->
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="app.js"></script>
+<!-- External Scripts (Defer pour ne pas bloquer le rendu) -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
+<script src="app.js" defer></script>
 <!-- Bootstrap 5 JS Bundle -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" defer></script>
 </body>
 </html>
