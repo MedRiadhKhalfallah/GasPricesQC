@@ -3,6 +3,7 @@ const API_URL = 'https://regieessencequebec.ca/stations.geojson.gz';
 // Variables de position
 let userLat = null;
 let userLng = null;
+let userCity = null; // Nom de la ville (API IP)
 
 // ── Haversine distance (km) ─────────────────────────────────────
 function haversine(lat1, lon1, lat2, lon2) {
@@ -116,81 +117,160 @@ function setStatus(html) {
 
 function updateLocationInfo() {
   if (userLat !== null && userLng !== null) {
-    document.getElementById('locationInfo').textContent =
-      `Position actuelle : ${userLat.toFixed(5)}°N, ${userLng.toFixed(5)}°O`;
+    if (userCity) {
+      document.getElementById('locationInfo').textContent =
+        `Position actuelle : ${userCity} (${userLat.toFixed(5)}°N, ${userLng.toFixed(5)}°O)`;
+    } else {
+      document.getElementById('locationInfo').textContent =
+        `Position actuelle : ${userLat.toFixed(5)}°N, ${userLng.toFixed(5)}°O`;
+    }
   } else {
     document.getElementById('locationInfo').textContent =
       "Position inconnue (veuillez vous géolocaliser ou choisir un emplacement).";
   }
 }
 
+// ── Gestion du LocalStorage ──────────────────────────────────────
+function savePreferences(filters) {
+  const prefs = {
+    lat: userLat,
+    lng: userLng,
+    city: userCity,
+    radius: filters.radiusKm,
+    max: filters.maxResults,
+    gasType: filters.gasType,
+    brand: filters.brandFilter
+  };
+  localStorage.setItem('gasPreferences', JSON.stringify(prefs));
+}
+
+function loadPreferences() {
+  try {
+    const data = localStorage.getItem('gasPreferences');
+    if (data) {
+      return JSON.parse(data);
+    }
+  } catch (e) {
+    console.error("Erreur lors de la lecture du LocalStorage", e);
+  }
+  return null;
+}
+
+// ── Outils de Géolocalisation (Navigateur + API IP Fallback) ────────────────
+function getUserLocation() {
+  return new Promise((resolve, reject) => {
+    if (!navigator.geolocation) {
+      reject(new Error("Géolocalisation non supportée par le navigateur."));
+    } else {
+      navigator.geolocation.getCurrentPosition(
+        pos => resolve({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
+        err => reject(err),
+        { timeout: 5000, enableHighAccuracy: true } // Timeout bas (5s) pour passer vite au fallback si l'utilisateur ignore la demande
+      );
+    }
+  });
+}
+
+async function getIPLocation() {
+  console.log("Appel à l'API geojs.io...");
+  const response = await fetch('https://get.geojs.io/v1/ip/geo.json');
+  if (!response.ok) throw new Error("Erreur de l'API IP");
+  const data = await response.json();
+  console.log("Résultat API IP:", data);
+  return { lat: parseFloat(data.latitude), lng: parseFloat(data.longitude), city: data.city };
+}
+
 // ── Geolocation Automatique au Démarrage ──────────────────────────────────────
-function initGeolocation() {
+async function initGeolocation() {
   setStatus('<div class="spinner-border text-primary" role="status"></div> <div class="mt-2 text-muted">Recherche de votre position...</div>');
 
-  if (!navigator.geolocation) {
-    setStatus('<div class="alert alert-warning">La géolocalisation n\'est pas supportée par votre navigateur. Veuillez sélectionner une ville manuellement.</div>');
-    // Fallback automatique s'il le faut (ex: Montréal) ou forcer l'utilisateur à choisir.
-    userLat = 45.5017; userLng = -73.5673;
+  // Vérifier d'abord les préférences sauvegardées
+  const prefs = loadPreferences();
+  if (prefs && prefs.lat !== null && prefs.lng !== null) {
+    console.log("Préférences trouvées dans le LocalStorage", prefs);
+    userLat = prefs.lat;
+    userLng = prefs.lng;
+    userCity = prefs.city;
+
+    // Restaurer les filtres dans l'interface
+    if (prefs.radius) document.getElementById('radius').value = prefs.radius;
+    if (prefs.max) document.getElementById('maxResults').value = prefs.max;
+    if (prefs.gasType) document.getElementById('gasType').value = prefs.gasType;
+    if (prefs.brand) document.getElementById('brandFilter').value = prefs.brand;
+
     updateLocationInfo();
+    setStatus('<div class="alert alert-success py-2">✅ Position et filtres restaurés !</div>');
     search();
     return;
   }
 
-  navigator.geolocation.getCurrentPosition(
-    pos => {
-      userLat = pos.coords.latitude;
-      userLng = pos.coords.longitude;
+  try {
+    // 1. Appel DIRECT a l'API IP car la géoloc navigateur est souvent bloquée/lente en développement local
+    const ipPos = await getIPLocation();
+    userLat = ipPos.lat;
+    userLng = ipPos.lng;
+    userCity = ipPos.city;
+    updateLocationInfo();
+    setStatus('<div class="alert alert-info">Position trouvée via votre adresse IP.</div>');
+    search();
+  } catch (ipErr) {
+    console.warn("Échec géolocalisation par IP...", ipErr);
+    try {
+      // 2. Fallback au GPS du navigateur si l'IP a échoué (très rare)
+      const pos = await getUserLocation();
+      userLat = pos.lat;
+      userLng = pos.lng;
+      userCity = null; // Pas de nom de ville direct avec le navigateur
       updateLocationInfo();
       search();
-    },
-    err => {
-      // En cas de refus ou d'erreur, fallback sur Montréal et recherche.
-      console.warn("Erreur géoloc", err);
+    } catch (err) {
+      console.warn("Échec géolocalisation navigateur...", err);
+      // 3. Dernier recours : Centre-ville de Montréal
       userLat = 45.5017;
       userLng = -73.5673;
+      userCity = "Montréal (Défaut)";
       updateLocationInfo();
-      setStatus('<div class="alert alert-warning">Géolocalisation bloquée ou introuvable. Affichage des résultats pour Montréal par défaut. Modifiez l\'emplacement si besoin.</div>');
+      setStatus('<div class="alert alert-warning">Localisation introuvable. Affichage de Montréal par défaut. Utilisez le bouton "Changer d\'emplacement".</div>');
       search();
     }
-  );
+  }
 }
 
 // ── Geolocation Manuel (Bouton dans Modal) ───────────────────────────────────
-document.getElementById('btnGeo').addEventListener('click', () => {
+document.getElementById('btnGeo').addEventListener('click', async () => {
   const btn = document.getElementById('btnGeo');
   const initialHtml = btn.innerHTML;
-
-  if (!navigator.geolocation) {
-    alert("La géolocalisation n'est pas supportée par ce navigateur.");
-    return;
-  }
 
   btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Recherche en cours...';
   btn.disabled = true;
 
-  navigator.geolocation.getCurrentPosition(
-    pos => {
-      btn.innerHTML = initialHtml;
-      btn.disabled = false;
-      const lat = pos.coords.latitude;
-      const lng = pos.coords.longitude;
-
-      document.getElementById('manualLat').value = lat.toFixed(6);
-      document.getElementById('manualLng').value = lng.toFixed(6);
-      document.getElementById('citySelect').value = ""; // Reset city
-
-      if (map && marker) {
-        map.setView([lat, lng], 12);
-        marker.setLatLng([lat, lng]);
-      }
-    },
-    err => {
-      btn.innerHTML = initialHtml;
-      btn.disabled = false;
-      alert(`Impossible d'obtenir la position : ${err.message}`);
+  try {
+    let pos;
+    try {
+      // Pour le bouton manuel (action explicite de l'utilisateur), on tente le "vrai" GPS d'abord...
+      pos = await getUserLocation();
+      userCity = null; // réinitialiser la ville si on bascule sur les coordonnées "pures" du GPS
+    } catch (err) {
+      console.warn("Navigateur bloqué, passage à l'IP...");
+      // ... et on se rabat sur l'IP s'il a refusé.
+      pos = await getIPLocation();
+      userCity = pos.city;
     }
-  );
+
+    document.getElementById('manualLat').value = pos.lat.toFixed(6);
+    document.getElementById('manualLng').value = pos.lng.toFixed(6);
+    document.getElementById('citySelect').value = ""; // Reset city
+
+    if (map && marker) {
+      map.setView([pos.lat, pos.lng], 12);
+      marker.setLatLng([pos.lat, pos.lng]);
+    }
+  } catch (finalErr) {
+    alert("Impossible d'obtenir la position (Navigateur bloqué et API IP indisponible).");
+  } finally {
+    btn.innerHTML = initialHtml;
+    btn.disabled = false;
+  }
 });
 
 // ── Gestion du Modal d'emplacement & de la carte (Leaflet) ───────────────────
@@ -233,6 +313,10 @@ document.getElementById('citySelect').addEventListener('change', (e) => {
     const [lat, lng] = val.split(',').map(Number);
     document.getElementById('manualLat').value = lat.toFixed(6);
     document.getElementById('manualLng').value = lng.toFixed(6);
+
+    // Mettre à jour le nom de la ville sélectionnée manuellement
+    userCity = e.target.options[e.target.selectedIndex].text;
+
     if (map && marker) {
       map.setView([lat, lng], 11);
       marker.setLatLng([lat, lng]);
@@ -247,6 +331,12 @@ document.getElementById('btnSaveLocation').addEventListener('click', () => {
   if (!isNaN(lat) && !isNaN(lng)) {
     userLat = lat;
     userLng = lng;
+
+    // Si l'utilisateur a cliqué librement sur la carte sans passer par CitySelect
+    if (document.getElementById('citySelect').value === "") {
+        userCity = null;
+    }
+
     updateLocationInfo();
 
     // Fermer la modal Bootstrap (nécessite l'instance Modal)
@@ -274,6 +364,9 @@ async function search() {
   const gasType = document.getElementById('gasType').value || 'Régulier';
   const brandFilter = document.getElementById('brandFilter').value.trim();
   const btn = document.getElementById('btnSearch');
+
+  // Sauvegarder les choix dans le localStorage à chaque recherche
+  savePreferences({ radiusKm, maxResults, gasType, brandFilter });
 
   btn.disabled = true;
   document.getElementById('grid').innerHTML = '';
