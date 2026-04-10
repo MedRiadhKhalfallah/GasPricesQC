@@ -227,7 +227,7 @@
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <style>
-    body { background-color: #f8f9fa; font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+    body { background-color: #f8f9fa; font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; overflow-x: hidden; }
 
     /* Couleurs officielles du Québec */
     .bg-quebec { background-color: #0033A0 !important; }
@@ -260,6 +260,54 @@
 
     /* Smooth scroll */
     html { scroll-behavior: smooth; }
+
+    /* ===== Google AdSense — Slots publicitaires ===== */
+    /* Le wrapper n'est plus flex — les sidebars sont en position fixe */
+    .ad-layout-wrapper {
+      display: block;
+      width: 100%;
+    }
+
+    /* Sidebars masquées par défaut */
+    .ad-sidebar {
+      display: none;
+    }
+
+    /* Sidebars en position FIXE — visibles uniquement si l'écran est assez large (≥1420px)
+       Elles flottent en dehors du flux, sans créer de défilement horizontal */
+    @media (min-width: 1420px) {
+      .ad-sidebar {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: fixed;
+        top: 110px;
+        z-index: 50;
+        width: 160px;
+        padding: 0;
+      }
+      .ad-sidebar-left  { left: 4px; }
+      .ad-sidebar-right { right: 4px; }
+      .ad-sidebar ins   { position: static !important; }
+    }
+
+    .ad-before-results {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    .ad-between-blocks {
+      text-align: center;
+    }
+
+    /* ===== Masquer les blocs pub vides (pas d'annonce Google) ===== */
+    .ad-before-results:has(ins[data-ad-status="unfilled"]),
+    .ad-between-blocks:has(ins[data-ad-status="unfilled"]),
+    .ad-sidebar:has(ins[data-ad-status="unfilled"]) {
+      display: none !important;
+    }
+    .ad-slot-empty {
+      display: none !important;
+    }
   </style>
 </head>
 <body>
@@ -299,6 +347,18 @@
     <p class="mb-0" style="color: #e6f0ff;">Trouvez les stations les moins chères autour de vous — <strong>Régulier · Super · Diesel</strong></p>
   </div>
 </header>
+
+<!-- ===== Wrapper flex : sidebar gauche | contenu | sidebar droite ===== -->
+<div class="ad-layout-wrapper">
+
+  <!-- Pub Sidebar GAUCHE (position fixe, visible ≥1420px via CSS) -->
+  <aside class="ad-sidebar ad-sidebar-left" aria-label="Publicité gauche">
+    <ins class="adsbygoogle"
+         style="display:inline-block;width:160px;height:600px"
+         data-ad-client="ca-pub-6728555204526816"
+         data-ad-slot="SLOT_ID_GAUCHE"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </aside>
 
 <main class="container mb-5" role="main" id="main-content">
   <!-- SEO Hidden H2 for structure -->
@@ -366,6 +426,17 @@
 
   <div id="resultsHeader" class="alert alert-info text-center d-none shadow-sm" role="status" aria-live="polite"></div>
 
+  <!-- Pub horizontale avant les résultats (Leaderboard 728x90 / responsive) -->
+  <div class="ad-before-results" aria-label="Publicité">
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-6728555204526816"
+         data-ad-slot="SLOT_ID_RESULTATS"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
   <!-- SEO Hidden H2 -->
   <h2 class="visually-hidden">Résultats des stations d'essence triés par prix</h2>
 
@@ -376,6 +447,17 @@
     </div>
   </div>
 
+  <!-- Pub entre la liste des résultats et la section À propos -->
+  <div class="ad-between-blocks my-4 text-center" aria-label="Publicité">
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-6728555204526816"
+         data-ad-slot="SLOT_ID_APRES_RESULTATS"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
   <!-- Contenu sémantique SEO (Texte statique pour indexation longue traîne) — ~400 mots -->
   <section class="mt-5 p-4 bg-white rounded shadow-sm border" style="border-left: 4px solid #0033A0 !important;" id="about">
     <h2 class="h5 text-quebec fw-bold mb-3"><i class="bi bi-fuel-pump" aria-hidden="true"></i> Comment trouver l'essence la moins chère au Québec ?</h2>
@@ -384,6 +466,17 @@
     <p class="small">L'application fonctionne sur <strong>mobile, tablette et ordinateur</strong> grâce à un design responsive. Vous pouvez l'ajouter à votre écran d'accueil comme une application native (PWA). Vos préférences sont sauvegardées localement pour des recherches plus rapides.</p>
     <p class="mb-0 text-muted small">Les données proviennent de la <strong>Régie de l'énergie du Québec</strong> et sont mises à jour quotidiennement pour vous offrir les informations les plus précises sur les stations-service à proximité de votre emplacement. <a href="https://www.regie-energie.qc.ca/" target="_blank" rel="noopener noreferrer" class="text-quebec">En savoir plus sur la Régie de l'énergie</a>.</p>
   </section>
+
+  <!-- Pub entre "À propos" et "Pourquoi nous faire confiance ?" -->
+  <div class="ad-between-blocks my-4 text-center" aria-label="Publicité">
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-6728555204526816"
+         data-ad-slot="SLOT_ID_APRES_APROPOS"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
 
   <!-- Section À propos — E-E-A-T (Expertise, Expérience, Autorité, Confiance) -->
   <section class="mt-4 p-4 bg-white rounded shadow-sm border" style="border-left: 4px solid #28a745 !important;">
@@ -407,6 +500,17 @@
       </div>
     </div>
   </section>
+
+  <!-- Pub entre "Pourquoi nous faire confiance ?" et la FAQ -->
+  <div class="ad-between-blocks my-4 text-center" aria-label="Publicité">
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-6728555204526816"
+         data-ad-slot="SLOT_ID_AVANT_FAQ"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
 
   <!-- FAQ visible (miroir du JSON-LD FAQPage — Google Rich Snippets) -->
   <section class="mt-4 p-4 bg-white rounded shadow-sm border" id="faq">
@@ -476,6 +580,17 @@
   </section>
 
 </main>
+
+  <!-- Pub Sidebar DROITE (position fixe, visible ≥1420px via CSS) -->
+  <aside class="ad-sidebar ad-sidebar-right" aria-label="Publicité droite">
+    <ins class="adsbygoogle"
+         style="display:inline-block;width:160px;height:600px"
+         data-ad-client="ca-pub-6728555204526816"
+         data-ad-slot="SLOT_ID_DROITE"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </aside>
+
+</div><!-- /.ad-layout-wrapper -->
 
 <!-- Modal Emplacement -->
 <div class="modal fade" id="locationModal" tabindex="-1" aria-labelledby="locationModalLabel" aria-hidden="true">
@@ -576,5 +691,40 @@
 <script src="app.js" defer></script>
 <!-- Bootstrap 5 JS Bundle -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" defer></script>
+
+<!-- Masquer les blocs pub vides (fallback JS pour tous les navigateurs) -->
+<script>
+(function() {
+  function hideEmptyAdSlot(ins) {
+    var wrapper = ins.closest('.ad-before-results, .ad-between-blocks, .ad-sidebar');
+    if (wrapper) wrapper.classList.add('ad-slot-empty');
+  }
+
+  function observeAdSlot(ins) {
+    // Vérification initiale (au cas où déjà défini)
+    if (ins.dataset.adStatus === 'unfilled') {
+      hideEmptyAdSlot(ins);
+      return;
+    }
+    // Observer les changements d'attribut data-ad-status
+    var observer = new MutationObserver(function() {
+      if (ins.dataset.adStatus === 'unfilled') {
+        hideEmptyAdSlot(ins);
+        observer.disconnect();
+      }
+    });
+    observer.observe(ins, { attributes: true, attributeFilter: ['data-ad-status'] });
+  }
+
+  // Lancer l'observation après le chargement de la page
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('ins.adsbygoogle').forEach(observeAdSlot);
+    });
+  } else {
+    document.querySelectorAll('ins.adsbygoogle').forEach(observeAdSlot);
+  }
+})();
+</script>
 </body>
 </html>
