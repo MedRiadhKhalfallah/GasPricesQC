@@ -5,6 +5,9 @@ let userLat = null;
 let userLng = null;
 let userCity = null; // Nom de la ville (API IP)
 
+let currentStations = []; // Stockage global pour le comparateur
+let comparatorStations = []; // Stations actuellement dans le comparateur
+
 // ── Haversine distance (km) ─────────────────────────────────────
 function haversine(lat1, lon1, lat2, lon2) {
   const R = 6371;
@@ -365,7 +368,7 @@ document.getElementById('btnSaveLocation').addEventListener('click', () => {
   }
 });
 
-// ── Recherche principale ───────────────────────────────────────
+// ── Recherche principale ────────────────────────────────��──────
 document.getElementById('btnSearch').addEventListener('click', search);
 
 async function search() {
@@ -404,6 +407,11 @@ async function search() {
       header.classList.remove('d-none');
       header.textContent =
         `${stations.length} station(s) trouvée(s) · rayon ${radiusKm} km · triées par prix ↑`;
+
+      currentStations = stations;
+      // On réinitialise le comparateur avec le top 3 par défaut, et on nettoie les rabais
+      comparatorStations = stations.slice(0, 3).map(s => ({...s, dPL: 0, fD: 0}));
+      renderComparator();
       renderCards(stations);
 
       // SEO : mise à jour dynamique du titre de la page et de la meta description
@@ -423,6 +431,152 @@ async function search() {
   } finally {
     btn.disabled = false;
   }
+}
+
+// ── Comparateur Top 3 ─────────────────────────���────────────────
+window.updateDiscount = function(index) {
+  const dPL = parseFloat(document.getElementById(`discountPerLiter_${index}`).value) || 0;
+  const fD = parseFloat(document.getElementById(`fixedDiscount_${index}`).value) || 0;
+  if(comparatorStations[index]) {
+    comparatorStations[index].dPL = Math.max(0, dPL);
+    comparatorStations[index].fD = Math.max(0, fD);
+  }
+  renderComparator();
+};
+
+window.removeStation = function(index) {
+  comparatorStations.splice(index, 1);
+  renderComparator();
+};
+
+function renderComparator() {
+  const container = document.getElementById('comparatorContainer');
+  const body = document.getElementById('comparatorBody');
+  const capacityInput = document.getElementById('tankCapacity');
+
+  if (!comparatorStations || comparatorStations.length < 2) {
+    container.classList.add('d-none');
+    return;
+  }
+
+  container.classList.remove('d-none');
+
+  const capacity = parseFloat(capacityInput.value) || 25;
+
+  let html = '<div class="row g-3 text-center">';
+
+  // Pre-calculate effective totals to find the best alternative
+  const totals = comparatorStations.map((s) => {
+    const dPL = s.dPL || 0;
+    const fD = s.fD || 0;
+    const effectivePrice = Math.max(0, s.price - dPL);
+    return Math.max(0, (effectivePrice * capacity / 100) - fD);
+  });
+
+  const bestTotal = Math.min(...totals);
+
+  comparatorStations.forEach((s, i) => {
+    const total = totals[i];
+    const diff = (total - bestTotal).toFixed(2);
+    const dPL = s.dPL || 0;
+    const fD = s.fD || 0;
+
+    let diffBadge = '';
+    if (diff === "0.00") {
+      diffBadge = '<span class="badge bg-success">Meilleur prix</span>';
+    } else {
+      diffBadge = `<span class="badge bg-danger text-white">+ ${diff} $</span>`;
+    }
+
+    const rankColors = ['#ffd700', '#c0c0c0', '#cd7f32'];
+    const rankColor = i < 3 ? rankColors[i] : '#6c757d';
+
+    // Formatting original vs discounted price per liter
+    const priceText = dPL > 0
+      ? `<del class="text-danger small">${s.price.toFixed(1)}</del> <strong class="text-success">${Math.max(0, s.price - dPL).toFixed(1)}</strong>`
+      : s.price.toFixed(1);
+
+    html += `
+      <div class="col-12 col-md-4">
+        <div class="p-3 border rounded shadow-sm h-100 d-flex flex-column justify-content-between position-relative" style="background-color: #f8f9fa;">
+          <button type="button" class="btn-close position-absolute top-0 end-0 m-2" aria-label="Retirer du comparateur" onclick="removeStation(${i})"></button>
+          <div>
+            <div class="fw-bold mb-2 badge" style="background-color: ${rankColor}; color: ${i === 0 ? '#000' : '#fff'}; font-size: 1rem;">Trio ${i + 1}</div>
+            <div class="text-truncate fw-bold mb-1" title="${s.Name}">${s.Name || 'Station inconnue'}</div>
+            <div class="small text-muted mb-2">${s.brand || '—'}</div>
+          </div>
+          <div>
+            <div class="fs-4 text-quebec fw-bold mb-1">${total.toFixed(2)}<span class="fs-6 text-muted ms-1">$</span></div>
+            <div class="small text-muted mb-3">${priceText} ¢/L</div>
+            <div class="mb-3">${diffBadge}</div>
+            
+            <div class="row g-1 text-start">
+              <div class="col-6">
+                <label for="discountPerLiter_${i}" class="form-label" style="font-size: 0.70rem; margin-bottom: 2px;"><i class="bi bi-tag-fill"></i> Rabais (¢/L)</label>
+                <input type="number" id="discountPerLiter_${i}" class="form-control form-control-sm text-center" value="${dPL}" min="0" step="0.1" oninput="updateDiscount(${i})">
+              </div>
+              <div class="col-6">
+                <label for="fixedDiscount_${i}" class="form-label text-truncate" style="font-size: 0.70rem; margin-bottom: 2px;" title="Prime au plein ($)"><i class="bi bi-cash"></i> Prime ($)</label>
+                <input type="number" id="fixedDiscount_${i}" class="form-control form-control-sm text-center" value="${fD}" min="0" step="0.25" oninput="updateDiscount(${i})">
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    `;
+  });
+
+  html += '</div>';
+  body.innerHTML = html;
+}
+
+document.getElementById('tankCapacity').addEventListener('input', renderComparator);
+
+// ── Modal Ajout de Station ────���─────────────────────────────────
+const addStationModalEl = document.getElementById('addStationModal');
+addStationModalEl.addEventListener('show.bs.modal', renderModalList);
+document.getElementById('modalBrandFilter').addEventListener('input', renderModalList);
+
+function renderModalList() {
+  const filterText = document.getElementById('modalBrandFilter').value.trim().toLowerCase();
+  const list = document.getElementById('modalStationsList');
+  list.innerHTML = '';
+
+  // On exclut les stations déjà dans le comparateur
+  const inComparatorIds = comparatorStations.map(s => s.id || s.Name + s.Address);
+  const available = currentStations.filter(s => !inComparatorIds.includes(s.id || s.Name + s.Address));
+
+  const filtered = available.filter(s => {
+    if(!filterText) return true;
+    return (s.Name || '').toLowerCase().includes(filterText) || (s.brand || '').toLowerCase().includes(filterText);
+  });
+
+  if (filtered.length === 0) {
+    list.innerHTML = '<div class="text-muted p-3 text-center">Aucune station disponible à ajouter.</div>';
+    return;
+  }
+
+  filtered.forEach(s => {
+    const btn = document.createElement('button');
+    btn.className = 'list-group-item list-group-item-action d-flex justify-content-between align-items-center mb-1 rounded border';
+    btn.innerHTML = `
+      <div>
+        <div class="fw-bold">${s.Name || 'Station inconnue'} <span class="badge bg-primary rounded-pill ms-1">${s.brand || '—'}</span></div>
+        <div class="small text-muted">${s.Address || '—'} · <i class="bi bi-car-front"></i> ${s.distance_km} km</div>
+      </div>
+      <div class="text-end">
+        <div class="fw-bold text-danger">${s.price.toFixed(1)} ¢/L</div>
+      </div>
+    `;
+    btn.onclick = () => {
+      comparatorStations.push({...s, dPL: 0, fD: 0});
+      renderComparator();
+      const modal = bootstrap.Modal.getInstance(addStationModalEl);
+      modal.hide();
+    };
+    list.appendChild(btn);
+  });
 }
 
 // Lancer la géolocalisation automatiquement au chargement (qui lancera ensuite search)

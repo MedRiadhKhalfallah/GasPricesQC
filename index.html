@@ -426,6 +426,27 @@
 
   <div id="resultsHeader" class="alert alert-info text-center d-none shadow-sm" role="status" aria-live="polite"></div>
 
+  <!-- Comparateur Top 3 -->
+  <div id="comparatorContainer" class="d-none mb-4 col-12 col-lg-8 mx-auto">
+    <div class="card shadow-sm" style="border-top: 4px solid #0033A0;">
+      <div class="card-header bg-white py-3">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+          <span class="fw-bold text-quebec"><i class="bi bi-calculator" aria-hidden="true"></i> Comparateur de plein</span>
+          <div class="d-flex align-items-center flex-wrap gap-2">
+            <button class="btn btn-sm btn-outline-quebec" data-bs-toggle="modal" data-bs-target="#addStationModal" aria-label="Ajouter une station au comparateur"><i class="bi bi-plus-lg" aria-hidden="true"></i> Ajouter une station</button>
+            <div class="d-flex align-items-center">
+              <label for="tankCapacity" class="me-2 small mb-0 fw-bold">Volume (L)</label>
+              <input type="number" id="tankCapacity" class="form-control text-center fw-bold text-quebec" value="25" min="1" max="150" style="width: 80px;" aria-label="Volume du plein en litres">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body" id="comparatorBody">
+        <!-- Contenu injecté via JS -->
+      </div>
+    </div>
+  </div>
+
   <!-- Pub horizontale avant les résultats (Leaderboard 728x90 / responsive) -->
   <div class="ad-before-results" aria-label="Publicité">
     <ins class="adsbygoogle"
@@ -634,6 +655,26 @@
       <div class="modal-footer d-flex justify-content-between">
         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
         <button type="button" class="btn btn-quebec px-4" id="btnSaveLocation" aria-label="Confirmer et utiliser cet emplacement pour la recherche">Valider l'emplacement</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Ajout Station -->
+<div class="modal fade" id="addStationModal" tabindex="-1" aria-labelledby="addStationModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header bg-quebec text-white">
+        <h5 class="modal-title" id="addStationModalLabel"><i class="bi bi-building-add" aria-hidden="true"></i> Ajouter une station</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fermer la fenêtre d'ajout"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <input type="text" id="modalBrandFilter" class="form-control" placeholder="Filtrer par marque ou nom..." aria-label="Filtrer les stations par marque ou nom">
+        </div>
+        <div id="modalStationsList" class="list-group">
+          <!-- Liste injectée via JS -->
+        </div>
       </div>
     </div>
   </div>
