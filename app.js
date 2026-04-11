@@ -17,7 +17,7 @@ function haversine(lat1, lon1, lat2, lon2) {
   const a = Math.sin(dLat / 2) ** 2 +
             Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
             Math.sin(dLon / 2) ** 2;
-  return parseFloat((R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))).toFixed(2));
+  return Number.parseFloat((R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))).toFixed(2));
 }
 
 // ── Parse prix selon le type d'essence ──────────────
@@ -26,8 +26,8 @@ function getPrice(prices, gasType) {
   const regex = new RegExp(gasType, 'i');
   const entry = prices.find(p => regex.test(p.GasType) && p.IsAvailable);
   if (!entry) return null;
-  const num = parseFloat(String(entry.Price).replace(/[^\d.]/g, ''));
-  return isNaN(num) ? null : num;
+  const num = Number.parseFloat(String(entry.Price).replaceAll(/[^\d.]/g, ''));
+  return Number.isNaN(num) ? null : num;
 }
 
 // ── Fetch + décompresse le GeoJSON .gz ─────────────────────────
@@ -195,7 +195,7 @@ async function getIPLocation() {
   if (!response.ok) throw new Error("Erreur de l'API IP");
   const data = await response.json();
   console.log("Résultat API IP:", data);
-  return { lat: parseFloat(data.latitude), lng: parseFloat(data.longitude), city: data.city };
+  return { lat: Number.parseFloat(data.latitude), lng: Number.parseFloat(data.longitude), city: data.city };
 }
 
 // ── Geolocation Automatique au Démarrage ──────────────────────────────────────
@@ -343,10 +343,10 @@ document.getElementById('citySelect').addEventListener('change', (e) => {
 });
 
 document.getElementById('btnSaveLocation').addEventListener('click', () => {
-  const lat = parseFloat(document.getElementById('manualLat').value);
-  const lng = parseFloat(document.getElementById('manualLng').value);
+  const lat = Number.parseFloat(document.getElementById('manualLat').value);
+  const lng = Number.parseFloat(document.getElementById('manualLng').value);
 
-  if (!isNaN(lat) && !isNaN(lng)) {
+  if (!Number.isNaN(lat) && !Number.isNaN(lng)) {
     userLat = lat;
     userLng = lng;
 
@@ -377,8 +377,8 @@ async function search() {
     return;
   }
 
-  const radiusKm  = parseFloat(document.getElementById('radius').value) || 10;
-  const maxResults = parseInt(document.getElementById('maxResults').value) || 20;
+  const radiusKm  = Number.parseFloat(document.getElementById('radius').value) || 10;
+  const maxResults = Number.parseInt(document.getElementById('maxResults').value) || 20;
   const gasType = document.getElementById('gasType').value || 'Régulier';
   const brandFilter = document.getElementById('brandFilter').value.trim();
   const btn = document.getElementById('btnSearch');
@@ -435,8 +435,8 @@ async function search() {
 
 // ── Comparateur Top 3 ─────────────────────────���────────────────
 window.updateDiscount = function(index) {
-  const dPL = parseFloat(document.getElementById(`discountPerLiter_${index}`).value) || 0;
-  const fD = parseFloat(document.getElementById(`fixedDiscount_${index}`).value) || 0;
+  const dPL = Number.parseFloat(document.getElementById(`discountPerLiter_${index}`).value) || 0;
+  const fD = Number.parseFloat(document.getElementById(`fixedDiscount_${index}`).value) || 0;
   if(comparatorStations[index]) {
     comparatorStations[index].dPL = Math.max(0, dPL);
     comparatorStations[index].fD = Math.max(0, fD);
@@ -461,7 +461,7 @@ function renderComparator() {
 
   container.classList.remove('d-none');
 
-  const capacity = parseFloat(capacityInput.value) || 25;
+  const capacity = Number.parseFloat(capacityInput.value) || 25;
 
   let html = '<div class="row g-3 text-center">';
 
