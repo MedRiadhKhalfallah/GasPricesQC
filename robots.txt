@@ -1,13 +1,19 @@
 # robots.txt — Prix d'essence Québec
 # https://gas-prices-qc.vercel.app/
+# Mis à jour : 2026-04-12
 
 User-agent: *
 Allow: /
+Allow: /carte.html
+Allow: /avis.html
+Allow: /privacy.html
 Disallow: /api/
 Disallow: /*.json$
+Disallow: /*.geojson$
 
 # Autoriser les crawlers à accéder aux fichiers CSS et JS (pour le rendu)
 Allow: /app.js
+Allow: /carte.js
 Allow: /*.css$
 
 # Sitemaps

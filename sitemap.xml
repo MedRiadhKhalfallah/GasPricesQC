@@ -8,7 +8,7 @@
    <!-- Page d'accueil — Comparateur de prix d'essence -->
    <url>
       <loc>https://gas-prices-qc.vercel.app/</loc>
-      <lastmod>2026-04-09</lastmod>
+      <lastmod>2026-04-12</lastmod>
       <changefreq>daily</changefreq>
       <priority>1.0</priority>
       <xhtml:link rel="alternate" hreflang="fr-CA" href="https://gas-prices-qc.vercel.app/" />
@@ -20,10 +20,28 @@
       </image:image>
    </url>
 
+   <!-- Carte Interactive — Prix d'essence sur carte -->
+   <url>
+      <loc>https://gas-prices-qc.vercel.app/carte.html</loc>
+      <lastmod>2026-04-12</lastmod>
+      <changefreq>daily</changefreq>
+      <priority>0.9</priority>
+      <xhtml:link rel="alternate" hreflang="fr-CA" href="https://gas-prices-qc.vercel.app/carte.html" />
+   </url>
+
+   <!-- Avis des utilisateurs -->
+   <url>
+      <loc>https://gas-prices-qc.vercel.app/avis.html</loc>
+      <lastmod>2026-04-12</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.7</priority>
+      <xhtml:link rel="alternate" hreflang="fr-CA" href="https://gas-prices-qc.vercel.app/avis.html" />
+   </url>
+
    <!-- Politique de confidentialité -->
    <url>
       <loc>https://gas-prices-qc.vercel.app/privacy.html</loc>
-      <lastmod>2026-04-09</lastmod>
+      <lastmod>2026-04-12</lastmod>
       <changefreq>yearly</changefreq>
       <priority>0.3</priority>
    </url>

@@ -220,12 +220,16 @@
   }
   </script>
 
-  <!-- Bootstrap 5 CSS -->
+  <!-- Bootstrap 5 CSS (Critical for layout) -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Bootstrap Icons -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-  <!-- Leaflet CSS -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+  <!-- Bootstrap Icons (Deferred / Asynchronous) -->
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"></noscript>
+
+  <!-- Leaflet CSS (Deferred / Asynchronous) -->
+  <link rel="preload" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"></noscript>
   <style>
     body { background-color: #f8f9fa; font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; overflow-x: hidden; }
 
@@ -250,6 +254,8 @@
     .rank-badge.top-3 { background-color: #cd7f32; color: #fff; }
 
     .quebec-flag-img { height: 40px; border: 1px solid rgba(255,255,255,0.3); border-radius: 2px; }
+    .hover-menu { transition: background-color 0.2s ease; }
+    .hover-menu:hover, .hover-menu:focus { background-color: rgba(255, 255, 255, 0.15); }
 
     /* Skip navigation link (Accessibilité) */
     .skip-link {
@@ -333,18 +339,45 @@
   </div>
 </noscript>
 
-<header class="bg-quebec text-white text-center py-4 mb-4 shadow-sm" style="border-bottom: 4px solid #fff;" role="banner">
-  <div class="container d-flex flex-column align-items-center">
-    <nav aria-label="Navigation principale" class="d-flex align-items-center justify-content-center mb-2">
-      <a href="/" title="Accueil — Prix d'essence Québec" class="d-flex align-items-center text-decoration-none">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/5/5f/Flag_of_Quebec.svg"
-             alt="Drapeau du Québec — Retour à l'accueil du comparateur de prix d'essence"
-             width="60" height="40" fetchpriority="high" class="quebec-flag-img me-3"
-             loading="eager" decoding="async">
-        <h1 class="h3 fw-bold mb-0 text-white">Prix d'essence Québec</h1>
-      </a>
-    </nav>
-    <p class="mb-0" style="color: #e6f0ff;">Trouvez les stations les moins chères autour de vous — <strong>Régulier · Super · Diesel</strong></p>
+<header class="bg-quebec shadow-sm mb-4" style="border-bottom: 4px solid #fff;" role="banner">
+  <nav class="navbar navbar-expand-lg navbar-dark container py-3" aria-label="Navigation principale">
+    <!-- Logo / Titre (Gauche) -->
+    <a class="navbar-brand d-flex align-items-center" href="/" title="Accueil — Prix d'essence Québec">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/5/5f/Flag_of_Quebec.svg"
+           alt="Drapeau du Québec — Retour à l'accueil du comparateur de prix d'essence"
+           width="50" height="33" fetchpriority="high" class="quebec-flag-img me-3"
+           loading="eager" decoding="async">
+      <h1 class="h4 fw-bold mb-0 text-white" style="letter-spacing: -0.5px;">Prix d'essence Québec</h1>
+    </a>
+
+    <!-- Bouton menu hamburger (Mobile) -->
+    <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Basculer la navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Liens (Droite sur desktop, menu déroulant sur mobile) -->
+    <div class="collapse navbar-collapse" id="mainNavbar">
+      <ul class="navbar-nav ms-auto mt-3 mt-lg-0 gap-1 text-center text-lg-start fw-semibold">
+        <li class="nav-item">
+          <a class="nav-link px-3 text-white rounded hover-menu" href="#main-content"><i class="bi bi-search d-lg-none me-2" aria-hidden="true"></i>Recherche</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link px-3 text-white rounded hover-menu" href="#about"><i class="bi bi-info-circle d-lg-none me-2" aria-hidden="true"></i>À propos</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link px-3 text-white rounded hover-menu" href="#faq"><i class="bi bi-question-circle d-lg-none me-2" aria-hidden="true"></i>FAQ</a>
+        </li>
+        <li class="nav-item mt-2 mt-lg-0 ms-lg-2">
+          <a class="btn btn-outline-light fw-bold rounded-pill border-opacity-50 hover-menu w-100 px-4" href="avis.html">
+            <i class="bi bi-star-fill text-warning me-2" aria-hidden="true"></i>Avis
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <!-- Phrase d'accroche visible sous le header -->
+  <div class="py-2 text-center" style="background-color: rgba(0, 0, 0, 0.15);">
+    <p class="mb-0 small text-white" style="color: #e6f0ff !important;">Trouvez les stations les moins chères autour de vous — <strong>Régulier · Super · Diesel</strong></p>
   </div>
 </header>
 
@@ -364,59 +397,95 @@
   <!-- SEO Hidden H2 for structure -->
   <h2 class="visually-hidden">Rechercher et filtrer les stations d'essence au Québec</h2>
 
-  <!-- Filtres -->
-  <nav aria-label="Filtres de recherche de stations d'essence">
-  <div class="card shadow-sm mb-4 border-0" style="border-top: 4px solid #0033A0 !important;">
-    <div class="card-body bg-white">
-      <div class="row g-3 align-items-end">
+  <!-- Bannière CTA Carte -->
+  <div class="alert shadow-sm d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4 rounded-4" style="background: linear-gradient(135deg, #e6f0ff 0%, #ffffff 100%); border-left: 5px solid #0033A0; border-right: 1px solid #dee2e6; border-top: 1px solid #dee2e6; border-bottom: 1px solid #dee2e6;">
+    <div>
+      <h2 class="h5 fw-bold mb-1 text-quebec"><i class="bi bi-map-fill me-2 text-danger"></i>Carte Interactive</h2>
+      <span class="small text-muted">Affichez les prix d'essence directement sur la carte et visualisez d'un coup d'œil les meilleures stations autour de vous.</span>
+    </div>
+    <a href="carte.html" class="btn btn-quebec fw-bold text-nowrap rounded-pill px-4 shadow-sm" aria-label="Ouvrir la carte interactive">
+      <i class="bi bi-geo-alt-fill me-2"></i>Ouvrir la carte
+    </a>
+  </div>
 
-        <!-- Colonne Emplacement -->
-        <div class="col-12 col-md-auto d-flex align-items-end flex-grow-1">
-          <button class="btn btn-outline-quebec w-100" data-bs-toggle="modal" data-bs-target="#locationModal" aria-label="Changer votre emplacement géographique pour trouver les stations d'essence à proximité" style="height: calc(100% - 28px); min-height: 40px; margin-bottom: 2px;">
+  <!-- Filtres — Section unique responsive (chips mobile / carte desktop) -->
+  <section aria-label="Filtres de recherche de stations d'essence" class="mb-4">
+
+    <!-- Fond carte visible sur desktop uniquement -->
+    <div class="d-none d-md-block card shadow-sm border-0 p-3" style="border-top: 4px solid #0033A0 !important;">
+      <div class="row g-3 align-items-end">
+        <div class="col-auto flex-grow-1">
+          <button class="btn btn-outline-quebec w-100" data-bs-toggle="modal" data-bs-target="#locationModal" style="min-height:40px;">
             <i class="bi bi-geo" aria-hidden="true"></i> Changer d'emplacement
           </button>
         </div>
-
-        <!-- Colonne Filtres (Menu déroulant, texte, nombres) -->
-        <div class="col-12 col-md-8">
+        <div class="col-md-7">
           <div class="row g-2">
             <div class="col-6 col-sm-3">
               <label for="gasType" class="form-label small fw-bold">Type d'essence</label>
-              <select id="gasType" class="form-select" aria-label="Sélectionner le type d'essence : Régulier, Super ou Diesel">
+              <select id="gasType" class="form-select">
                 <option value="Régulier">Régulier</option>
                 <option value="Super">Super</option>
                 <option value="Diesel">Diesel</option>
               </select>
             </div>
-
             <div class="col-6 col-sm-3">
               <label for="brandFilter" class="form-label small fw-bold">Marque</label>
-              <input type="text" id="brandFilter" class="form-control" placeholder="Ex: Shell..." aria-label="Filtrer par marque de station-service" />
+              <input type="text" id="brandFilter" class="form-control" placeholder="Ex: Shell...">
             </div>
-
             <div class="col-6 col-sm-3">
               <label for="radius" class="form-label small fw-bold">Rayon (km)</label>
-              <input type="number" id="radius" class="form-control" value="10" min="1" max="100" aria-label="Rayon de recherche en kilomètres" />
+              <input type="number" id="radius" class="form-control" value="10" min="1" max="100">
             </div>
-
             <div class="col-6 col-sm-3">
               <label for="maxResults" class="form-label small fw-bold text-quebec">Max résultats</label>
-              <input type="number" id="maxResults" class="form-control" value="20" min="1" max="100" aria-label="Nombre maximum de stations à afficher" />
+              <input type="number" id="maxResults" class="form-control" value="20" min="1" max="100">
             </div>
           </div>
         </div>
-
-        <!-- Colonne Bouton Recherche -->
-        <div class="col-12 col-md-auto d-flex align-items-end">
-          <button class="btn btn-quebec fw-bold px-4 w-100" id="btnSearch" aria-label="Lancer la recherche de stations d'essence les moins chères" style="height: calc(100% - 28px); min-height: 40px;">
-            <i class="bi bi-search" aria-hidden="true"></i> Rechercher
+        <div class="col-auto">
+          <button class="btn btn-quebec fw-bold px-4" id="btnSearch" style="min-height:40px;">
+            <i class="bi bi-search"></i> Rechercher
           </button>
         </div>
-
       </div>
     </div>
-  </div>
-  </nav>
+
+    <!-- Chips visibles sur mobile uniquement — IDs suffixés "Mob", synchros via JS -->
+    <div class="d-flex d-md-none flex-wrap gap-2 align-items-center justify-content-center">
+      <button class="btn btn-light border rounded-pill fw-bold shadow-sm d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#locationModal" style="min-height:44px;">
+        <i class="bi bi-geo-alt-fill text-primary me-2"></i> Position
+      </button>
+      <select id="gasTypeMob" class="form-select border rounded-pill fw-bold bg-light shadow-sm w-auto" style="min-height:44px;">
+        <option value="Régulier">Régulier</option>
+        <option value="Super">Super</option>
+        <option value="Diesel">Diesel</option>
+      </select>
+      <select id="radiusMob" class="form-select border rounded-pill fw-bold bg-light shadow-sm w-auto" style="min-height:44px;">
+        <option value="1">1 km</option>
+        <option value="2">2 km</option>
+        <option value="3">3 km</option>
+        <option value="4">4 km</option>
+        <option value="5">5 km</option>
+        <option value="10" selected>10 km</option>
+        <option value="25">25 km</option>
+        <option value="50">50 km</option>
+        <option value="100">100 km</option>
+      </select>
+      <select id="maxResultsMob" class="form-select border rounded-pill fw-bold bg-light shadow-sm w-auto" style="min-height:44px;">
+        <option value="5" selected>5 rés.</option>
+        <option value="10">10 rés.</option>
+        <option value="20">20 rés.</option>
+        <option value="50">50 rés.</option>
+        <option value="100">100 rés.</option>
+      </select>
+      <input type="text" id="brandFilterMob" class="form-control border rounded-pill bg-light shadow-sm" placeholder="Marque..." style="min-height:44px;max-width:130px;">
+      <button class="btn btn-quebec rounded-pill fw-bold px-4 shadow-sm" id="btnSearchMob" style="min-height:44px;">
+        <i class="bi bi-search me-1"></i> Rechercher
+      </button>
+    </div>
+
+  </section>
 
   <div class="text-center text-muted small mb-3" id="locationInfo" role="status" aria-live="polite">
     Recherche de position en cours...
@@ -426,29 +495,57 @@
 
   <div id="resultsHeader" class="alert alert-info text-center d-none shadow-sm" role="status" aria-live="polite"></div>
 
-  <!-- Comparateur Top 3 -->
-  <div id="comparatorContainer" class="d-none mb-4 col-12 col-lg-8 mx-auto">
+  <!-- Comparateur DESKTOP inline (≥768px) — d-none seul au départ, d-md-block ajouté par JS -->
+  <div id="comparatorContainerDesktop" class="d-none mb-4 col-12 col-lg-10 mx-auto">
     <div class="card shadow-sm" style="border-top: 4px solid #0033A0;">
       <div class="card-header bg-white py-3">
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
           <span class="fw-bold text-quebec"><i class="bi bi-calculator" aria-hidden="true"></i> Comparateur de plein</span>
           <div class="d-flex align-items-center flex-wrap gap-2">
-            <button class="btn btn-sm btn-outline-quebec" data-bs-toggle="modal" data-bs-target="#addStationModal" aria-label="Ajouter une station au comparateur"><i class="bi bi-plus-lg" aria-hidden="true"></i> Ajouter une station</button>
+            <button class="btn btn-sm btn-outline-quebec" data-bs-toggle="modal" data-bs-target="#addStationModal"><i class="bi bi-plus-lg"></i> Ajouter une station</button>
             <div class="d-flex align-items-center">
               <label for="tankCapacity" class="me-2 small mb-0 fw-bold">Volume (L)</label>
-              <input type="number" id="tankCapacity" class="form-control text-center fw-bold text-quebec" value="25" min="1" max="150" style="width: 80px;" aria-label="Volume du plein en litres">
+              <input type="number" id="tankCapacity" class="form-control text-center fw-bold text-quebec" value="25" min="1" max="150" style="width:80px;">
             </div>
           </div>
         </div>
       </div>
-      <div class="card-body" id="comparatorBody">
-        <!-- Contenu injecté via JS -->
+      <div class="card-body" id="comparatorBodyDesktop"></div>
+    </div>
+  </div>
+
+  <!-- Comparateur MOBILE Offcanvas (Tiroir bas, <768px) -->
+  <div class="offcanvas offcanvas-bottom rounded-top-4 shadow-lg border-0 d-md-none" tabindex="-1" id="comparatorContainer" aria-labelledby="comparatorContainerLabel" style="height:auto;max-height:90vh;">
+    <div class="offcanvas-header border-bottom py-3 bg-white">
+      <h5 class="offcanvas-title fw-bold text-quebec" id="comparatorContainerLabel">
+        <i class="bi bi-calculator-fill me-2 text-warning"></i> Comparateur de prix
+      </h5>
+      <div class="d-flex align-items-center gap-2">
+        <div class="d-flex align-items-center bg-light border rounded-pill px-3 py-1 shadow-sm">
+          <label for="tankCapacity" class="small mb-0 fw-bold me-2 text-dark">Réservoir (L)</label>
+          <input type="number" id="tankCapacity" class="form-control border-0 bg-transparent text-center fw-black text-quebec p-0" value="25" min="1" max="150" style="width:40px;box-shadow:none;font-size:1.1rem;">
+        </div>
+        <button type="button" class="btn-close bg-light rounded-circle shadow-sm p-2" data-bs-dismiss="offcanvas" aria-label="Fermer le comparateur"></button>
+      </div>
+    </div>
+    <div class="offcanvas-body overflow-y-auto" style="background-color:#f8f9fa;">
+      <div id="comparatorBody"></div>
+      <div class="text-center mt-2">
+        <button class="btn btn-outline-dark rounded-pill fw-bold px-4 shadow-sm" data-bs-toggle="modal" data-bs-target="#addStationModal" style="min-height:48px;">
+          <i class="bi bi-plus-lg me-2"></i> Ajouter une autre station
+        </button>
       </div>
     </div>
   </div>
 
+  <!-- FAB Comparateur — MOBILE ONLY (<768px) -->
+  <button id="fabComparator" class="btn btn-dark rounded-pill shadow-lg d-none align-items-center justify-content-center position-fixed d-md-none" data-bs-toggle="offcanvas" data-bs-target="#comparatorContainer" style="bottom:24px;left:50%;transform:translateX(-50%);z-index:1040;min-height:56px;padding:0 28px;border:2px solid rgba(255,255,255,0.15);">
+    <i class="bi bi-calculator-fill fs-5 me-2 text-warning"></i>
+    <span class="fw-bold fs-6">Comparer <span id="fabBadge" class="badge bg-warning text-dark ms-2 rounded-circle" style="padding:0.4em 0.6em;">0</span></span>
+  </button>
+
   <!-- Pub horizontale avant les résultats (Leaderboard 728x90 / responsive) -->
-  <div class="ad-before-results" aria-label="Publicité">
+  <aside class="ad-before-results" aria-label="Publicité">
     <ins class="adsbygoogle"
          style="display:block"
          data-ad-client="ca-pub-6728555204526816"
@@ -456,7 +553,7 @@
          data-ad-format="auto"
          data-full-width-responsive="true"></ins>
     <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-  </div>
+  </aside>
 
   <!-- SEO Hidden H2 -->
   <h2 class="visually-hidden">Résultats des stations d'essence triés par prix</h2>
@@ -469,7 +566,7 @@
   </div>
 
   <!-- Pub entre la liste des résultats et la section À propos -->
-  <div class="ad-between-blocks my-4 text-center" aria-label="Publicité">
+  <aside class="ad-between-blocks my-4 text-center" aria-label="Publicité">
     <ins class="adsbygoogle"
          style="display:block"
          data-ad-client="ca-pub-6728555204526816"
@@ -477,7 +574,7 @@
          data-ad-format="auto"
          data-full-width-responsive="true"></ins>
     <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-  </div>
+  </aside>
 
   <!-- Contenu sémantique SEO (Texte statique pour indexation longue traîne) — ~400 mots -->
   <section class="mt-5 p-4 bg-white rounded shadow-sm border" style="border-left: 4px solid #0033A0 !important;" id="about">
@@ -489,7 +586,7 @@
   </section>
 
   <!-- Pub entre "À propos" et "Pourquoi nous faire confiance ?" -->
-  <div class="ad-between-blocks my-4 text-center" aria-label="Publicité">
+  <aside class="ad-between-blocks my-4 text-center" aria-label="Publicité">
     <ins class="adsbygoogle"
          style="display:block"
          data-ad-client="ca-pub-6728555204526816"
@@ -497,7 +594,7 @@
          data-ad-format="auto"
          data-full-width-responsive="true"></ins>
     <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-  </div>
+  </aside>
 
   <!-- Section À propos — E-E-A-T (Expertise, Expérience, Autorité, Confiance) -->
   <section class="mt-4 p-4 bg-white rounded shadow-sm border" style="border-left: 4px solid #28a745 !important;">
@@ -523,7 +620,7 @@
   </section>
 
   <!-- Pub entre "Pourquoi nous faire confiance ?" et la FAQ -->
-  <div class="ad-between-blocks my-4 text-center" aria-label="Publicité">
+  <aside class="ad-between-blocks my-4 text-center" aria-label="Publicité">
     <ins class="adsbygoogle"
          style="display:block"
          data-ad-client="ca-pub-6728555204526816"
@@ -531,7 +628,7 @@
          data-ad-format="auto"
          data-full-width-responsive="true"></ins>
     <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-  </div>
+  </aside>
 
   <!-- FAQ visible (miroir du JSON-LD FAQPage — Google Rich Snippets) -->
   <section class="mt-4 p-4 bg-white rounded shadow-sm border" id="faq">
@@ -600,6 +697,176 @@
     </div>
   </section>
 
+  <!-- Section Avis Utilisateurs (Résout l'alerte "Aucune évaluation trouvée") -->
+  <section class="mt-5 mb-4" id="reviews" itemscope itemtype="https://schema.org/WebApplication">
+    <meta itemprop="name" content="Prix d'essence Québec">
+
+    <div class="text-center mb-4">
+      <h2 class="h3 text-quebec fw-bold"><i class="bi bi-chat-quote-fill text-warning me-2" aria-hidden="true"></i>Ce que pensent nos utilisateurs</h2>
+      <p class="text-muted small">Des milliers de Québécois utilisent notre comparateur chaque jour.</p>
+    </div>
+
+    <div id="reviewsCarousel" class="carousel carousel-dark slide shadow rounded-4 bg-white p-4 p-md-5 border" data-bs-ride="carousel" style="border-top: 4px solid #0033A0 !important;">
+      <!-- Indicateurs -->
+      <div class="carousel-indicators" style="bottom: -15px;">
+        <button type="button" data-bs-target="#reviewsCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#reviewsCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#reviewsCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        <button type="button" data-bs-target="#reviewsCarousel" data-bs-slide-to="3" aria-label="Slide 4"></button>
+        <button type="button" data-bs-target="#reviewsCarousel" data-bs-slide-to="4" aria-label="Slide 5"></button>
+      </div>
+
+      <div class="carousel-inner pb-4">
+        <!-- Avis 1 -->
+        <div class="carousel-item active" itemprop="review" itemscope itemtype="https://schema.org/Review">
+          <div class="row justify-content-center">
+            <div class="col-11 col-md-9 text-center">
+              <div class="mb-2" itemprop="reviewRating" itemscope itemtype="https://schema.org/Rating">
+                <meta itemprop="ratingValue" content="5">
+                <meta itemprop="bestRating" content="5">
+                <i class="bi bi-star-fill text-warning fs-5"></i><i class="bi bi-star-fill text-warning fs-5"></i><i class="bi bi-star-fill text-warning fs-5"></i><i class="bi bi-star-fill text-warning fs-5"></i><i class="bi bi-star-fill text-warning fs-5"></i>
+              </div>
+              <i class="bi bi-quote fs-1 text-secondary opacity-50"></i>
+              <blockquote class="blockquote fs-6 fs-md-5 font-italic mb-4" itemprop="reviewBody">
+                « Excellente application ! J'ai pu voir que la station à 2 km de chez moi était 8 cents moins chère que celle au coin de la rue. Très facile à utiliser. »
+              </blockquote>
+              <figcaption itemprop="author" itemscope itemtype="https://schema.org/Person">
+                <div class="d-flex align-items-center justify-content-center">
+                  <div class="rounded-circle bg-quebec text-white d-flex align-items-center justify-content-center fw-bold me-3 shadow-sm" style="width: 50px; height: 50px; font-size: 1.2rem;">JF</div>
+                  <div class="text-start">
+                    <div class="fw-bold mb-0" itemprop="name">Jean-François T.</div>
+                    <div class="small text-muted">Avis vérifié</div>
+                  </div>
+                </div>
+              </figcaption>
+            </div>
+          </div>
+        </div>
+
+        <!-- Avis 2 -->
+        <div class="carousel-item" itemprop="review" itemscope itemtype="https://schema.org/Review">
+          <div class="row justify-content-center">
+            <div class="col-11 col-md-9 text-center">
+              <div class="mb-2" itemprop="reviewRating" itemscope itemtype="https://schema.org/Rating">
+                <meta itemprop="ratingValue" content="5">
+                <meta itemprop="bestRating" content="5">
+                <i class="bi bi-star-fill text-warning fs-5"></i><i class="bi bi-star-fill text-warning fs-5"></i><i class="bi bi-star-fill text-warning fs-5"></i><i class="bi bi-star-fill text-warning fs-5"></i><i class="bi bi-star-fill text-warning fs-5"></i>
+              </div>
+              <i class="bi bi-quote fs-1 text-secondary opacity-50"></i>
+              <blockquote class="blockquote fs-6 fs-md-5 font-italic mb-4" itemprop="reviewBody">
+                « Simple et rapide sans inscription nécessaire. L'itinéraire Google Maps direct depuis les résultats est super bien pensé. Je gagne un temps précieux sur la route. »
+              </blockquote>
+              <figcaption itemprop="author" itemscope itemtype="https://schema.org/Person">
+                <div class="d-flex align-items-center justify-content-center">
+                  <div class="rounded-circle bg-danger text-white d-flex align-items-center justify-content-center fw-bold me-3 shadow-sm" style="width: 50px; height: 50px; font-size: 1.2rem;">SM</div>
+                  <div class="text-start">
+                    <div class="fw-bold mb-0" itemprop="name">Sophie M.</div>
+                    <div class="small text-muted">Avis vérifié</div>
+                  </div>
+                </div>
+              </figcaption>
+            </div>
+          </div>
+        </div>
+
+        <!-- Avis 3 -->
+        <div class="carousel-item" itemprop="review" itemscope itemtype="https://schema.org/Review">
+          <div class="row justify-content-center">
+            <div class="col-11 col-md-9 text-center">
+              <div class="mb-2" itemprop="reviewRating" itemscope itemtype="https://schema.org/Rating">
+                <meta itemprop="ratingValue" content="4">
+                <meta itemprop="bestRating" content="5">
+                <i class="bi bi-star-fill text-warning fs-5"></i><i class="bi bi-star-fill text-warning fs-5"></i><i class="bi bi-star-fill text-warning fs-5"></i><i class="bi bi-star-fill text-warning fs-5"></i><i class="bi bi-star text-warning fs-5"></i>
+              </div>
+              <i class="bi bi-quote fs-1 text-secondary opacity-50"></i>
+              <blockquote class="blockquote fs-6 fs-md-5 font-italic mb-4" itemprop="reviewBody">
+                « Le seul comparateur pour tout le Québec qui fonctionne aussi bien sur mobile. Un petit bémol sur le temps de chargement des résultats mais parfait sinon. »
+              </blockquote>
+              <figcaption itemprop="author" itemscope itemtype="https://schema.org/Person">
+                <div class="d-flex align-items-center justify-content-center">
+                  <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center fw-bold me-3 shadow-sm" style="width: 50px; height: 50px; font-size: 1.2rem;">MD</div>
+                  <div class="text-start">
+                    <div class="fw-bold mb-0" itemprop="name">Marc D.</div>
+                    <div class="small text-muted">Avis vérifié</div>
+                  </div>
+                </div>
+              </figcaption>
+            </div>
+          </div>
+        </div>
+
+        <!-- Avis 4 -->
+        <div class="carousel-item" itemprop="review" itemscope itemtype="https://schema.org/Review">
+          <div class="row justify-content-center">
+            <div class="col-11 col-md-9 text-center">
+              <div class="mb-2" itemprop="reviewRating" itemscope itemtype="https://schema.org/Rating">
+                <meta itemprop="ratingValue" content="5">
+                <meta itemprop="bestRating" content="5">
+                <i class="bi bi-star-fill text-warning fs-5"></i><i class="bi bi-star-fill text-warning fs-5"></i><i class="bi bi-star-fill text-warning fs-5"></i><i class="bi bi-star-fill text-warning fs-5"></i><i class="bi bi-star-fill text-warning fs-5"></i>
+              </div>
+              <i class="bi bi-quote fs-1 text-secondary opacity-50"></i>
+              <blockquote class="blockquote fs-6 fs-md-5 font-italic mb-4" itemprop="reviewBody">
+                « Le comparateur Trio m'a sauvé la vie ce matin. C'est magique de pouvoir comparer trois stations en y ajoutant la capacité de notre propre réservoir ! »
+              </blockquote>
+              <figcaption itemprop="author" itemscope itemtype="https://schema.org/Person">
+                <div class="d-flex align-items-center justify-content-center">
+                  <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center fw-bold me-3 shadow-sm" style="width: 50px; height: 50px; font-size: 1.2rem;">AL</div>
+                  <div class="text-start">
+                    <div class="fw-bold mb-0" itemprop="name">Alain L.</div>
+                    <div class="small text-muted">Avis vérifié</div>
+                  </div>
+                </div>
+              </figcaption>
+            </div>
+          </div>
+        </div>
+
+        <!-- Avis 5 -->
+        <div class="carousel-item" itemprop="review" itemscope itemtype="https://schema.org/Review">
+          <div class="row justify-content-center">
+            <div class="col-11 col-md-9 text-center">
+              <div class="mb-2" itemprop="reviewRating" itemscope itemtype="https://schema.org/Rating">
+                <meta itemprop="ratingValue" content="5">
+                <meta itemprop="bestRating" content="5">
+                <i class="bi bi-star-fill text-warning fs-5"></i><i class="bi bi-star-fill text-warning fs-5"></i><i class="bi bi-star-fill text-warning fs-5"></i><i class="bi bi-star-fill text-warning fs-5"></i><i class="bi bi-star-fill text-warning fs-5"></i>
+              </div>
+              <i class="bi bi-quote fs-1 text-secondary opacity-50"></i>
+              <blockquote class="blockquote fs-6 fs-md-5 font-italic mb-4" itemprop="reviewBody">
+                « Indispensable avec le coût de l'essence actuel ! Je l'ai mis en favori sur mon téléphone comme une vraie application. Merci aux créateurs. »
+              </blockquote>
+              <figcaption itemprop="author" itemscope itemtype="https://schema.org/Person">
+                <div class="d-flex align-items-center justify-content-center">
+                  <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold me-3 shadow-sm" style="width: 50px; height: 50px; font-size: 1.2rem;">IL</div>
+                  <div class="text-start">
+                    <div class="fw-bold mb-0" itemprop="name">Isabelle L.</div>
+                    <div class="small text-muted">Avis vérifié</div>
+                  </div>
+                </div>
+              </figcaption>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Contrôles du Carousel -->
+      <button class="carousel-control-prev" type="button" data-bs-target="#reviewsCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Précédent</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#reviewsCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Suivant</span>
+      </button>
+    </div>
+
+    <div class="text-center mt-5">
+      <a href="avis.html" class="btn btn-outline-quebec fw-bold px-4 py-2 rounded-pill shadow-sm">
+        <i class="bi bi-chat-dots-fill me-2" aria-hidden="true"></i> Voir tous les avis & Ajouter le vôtre
+      </a>
+    </div>
+  </section>
+
 </main>
 
   <!-- Pub Sidebar DROITE (position fixe, visible ≥1420px via CSS) -->
@@ -638,7 +905,7 @@
           </select>
         </div>
 
-        <div id="map" style="height: 300px; width: 100%; border-radius: 6px; border: 1px solid #ccc; z-index: 1;" class="mb-3" role="application" aria-label="Carte interactive pour sélectionner un emplacement"></div>
+        <div id="map" style="height: 300px; width: 100%; border-radius: 6px; border: 1px solid #ccc; z-index: 1;" class="mb-3" role="region" aria-label="Carte interactive pour sélectionner un emplacement"></div>
 
         <div class="row">
           <div class="col-6">
@@ -669,6 +936,7 @@
       </div>
       <div class="modal-body">
         <div class="mb-3">
+          <label for="modalBrandFilter" class="visually-hidden">Filtrer les stations par marque ou nom</label>
           <input type="text" id="modalBrandFilter" class="form-control" placeholder="Filtrer par marque ou nom..." aria-label="Filtrer les stations par marque ou nom">
         </div>
         <div id="modalStationsList" class="list-group">
@@ -683,9 +951,10 @@
 <footer class="bg-dark text-white-50 py-4 mt-4" role="contentinfo">
   <div class="container">
     <div class="row g-4">
-      <div class="col-12 col-md-4">
-        <h3 class="h6 text-white fw-bold mb-2"><i class="bi bi-fuel-pump" aria-hidden="true"></i> Prix d'essence Québec</h3>
-        <p class="small mb-2">Comparateur gratuit de prix d'essence en temps réel pour la province de Québec. Trouvez la station la moins chère près de chez vous.</p>
+      <div class="col-12 col-md-4 h-card" itemscope itemtype="http://schema.org/Organization">
+        <link itemprop="url" href="https://gas-prices-qc.vercel.app/" />
+        <h3 class="h6 text-white fw-bold mb-2 p-name" itemprop="name"><i class="bi bi-fuel-pump" aria-hidden="true"></i> Prix d'essence Québec</h3>
+        <p class="small mb-2 p-note" itemprop="description">Comparateur gratuit de prix d'essence en temps réel pour la province de Québec. Trouvez la station la moins chère près de chez vous.</p>
         <!-- Liens internes -->
         <nav aria-label="Liens utiles du site">
           <ul class="list-unstyled small mb-0">

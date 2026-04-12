@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="fr-CA">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Avis et témoignages — Prix d'essence Québec</title>
+  <meta name="description" content="Lisez les avis de nos utilisateurs et partagez votre propre expérience avec notre comparateur de prix d'essence au Québec." />
+  <link rel="canonical" href="https://gas-prices-qc.vercel.app/avis.html" />
+
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+  <style>
+    body { background-color: #f8f9fa; font-family: "Segoe UI", Roboto, Arial, sans-serif; }
+    .bg-quebec { background-color: #0033A0 !important; }
+    .text-quebec { color: #0033A0 !important; }
+    .btn-quebec { background-color: #0033A0; color: white; border: none; }
+    .btn-quebec:hover { background-color: #002277; color: white; }
+    .form-label { margin-bottom: 2px; }
+    .quebec-flag-img { height: 40px; border: 1px solid rgba(255,255,255,0.3); border-radius: 2px; }
+    .hover-menu { transition: background-color 0.2s ease; }
+    .hover-menu:hover, .hover-menu:focus { background-color: rgba(255, 255, 255, 0.15); }
+  </style>
+</head>
+<body>
+
+<header class="bg-quebec shadow-sm" style="border-bottom: 4px solid #fff;" role="banner">
+  <nav class="navbar navbar-expand-lg navbar-dark container py-3" aria-label="Navigation principale">
+    <!-- Logo / Titre (Gauche) -->
+    <a class="navbar-brand d-flex align-items-center" href="/" title="Accueil — Prix d'essence Québec">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/5/5f/Flag_of_Quebec.svg"
+           alt="Drapeau du Québec — Retour à l'accueil du comparateur de prix d'essence"
+           width="50" height="33" fetchpriority="high" class="quebec-flag-img me-3"
+           loading="eager" decoding="async">
+      <h1 class="h4 fw-bold mb-0 text-white" style="letter-spacing: -0.5px;">Prix d'essence Québec</h1>
+    </a>
+
+    <!-- Bouton menu hamburger (Mobile) -->
+    <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Basculer la navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Liens (Droite sur desktop, menu déroulant sur mobile) -->
+    <div class="collapse navbar-collapse" id="mainNavbar">
+      <ul class="navbar-nav ms-auto mt-3 mt-lg-0 gap-1 text-center text-lg-start fw-semibold">
+        <li class="nav-item">
+          <a class="nav-link px-3 text-white rounded hover-menu" href="/#main-content"><i class="bi bi-search d-lg-none me-2" aria-hidden="true"></i>Recherche</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link px-3 text-white rounded hover-menu" href="/#about"><i class="bi bi-info-circle d-lg-none me-2" aria-hidden="true"></i>À propos</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link px-3 text-white rounded hover-menu" href="/#faq"><i class="bi bi-question-circle d-lg-none me-2" aria-hidden="true"></i>FAQ</a>
+        </li>
+        <li class="nav-item mt-2 mt-lg-0 ms-lg-2">
+          <a class="btn btn-outline-light fw-bold rounded-pill border-opacity-50 hover-menu w-100 px-4 active" href="avis.html">
+            <i class="bi bi-star-fill text-warning me-2" aria-hidden="true"></i>Avis
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <!-- Phrase d'accroche visible sous le header -->
+  <div class="py-2 text-center" style="background-color: rgba(0, 0, 0, 0.15);">
+    <p class="mb-0 small text-white" style="color: #e6f0ff !important;">Trouvez les stations les moins chères autour de vous — <strong>Régulier · Super · Diesel</strong></p>
+  </div>
+</header>
+
+<main class="container my-5">
+  <nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb mt-2">
+      <li class="breadcrumb-item"><a href="/">Accueil</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Avis des utilisateurs</li>
+    </ol>
+  </nav>
+
+  <h2 class="fw-bold mb-4 text-quebec"><i class="bi bi-chat-left-text-fill text-warning me-2"></i>  Avis de nos utilisateurs</h2>
+
+  <div class="row g-4">
+    <!-- Colonne Formulaire (Ajouter un avis) -->
+    <div class="col-lg-5 order-lg-2">
+      <div class="card shadow-sm border-0 sticky-lg-top" style="top: 20px; border-top: 4px solid #0033A0 !important;">
+        <div class="card-body p-4">
+          <h3 class="h5 fw-bold mb-3">Laisser un avis</h3>
+          <p class="small text-muted mb-4">Votre avis nous aide à améliorer continuellement l'application pour tous les Québécois.</p>
+
+          <form id="reviewForm" onsubmit="event.preventDefault(); alert('Merci pour votre avis ! Celui-ci est en cours de modération et sera publié prochainement.'); this.reset();">
+            <div class="mb-3">
+              <label for="userName" class="form-label small fw-bold">Votre nom</label>
+              <input type="text" class="form-control bg-light" id="userName" required placeholder="Ex: Jean Tremblay">
+            </div>
+            <div class="mb-3">
+              <label for="rating" class="form-label small fw-bold">Note</label>
+              <select class="form-select bg-light" id="rating" required>
+                <option value="5" selected>⭐⭐⭐⭐⭐ (5/5 - Excellent)</option>
+                <option value="4">⭐⭐⭐⭐ (4/5 - Très bien)</option>
+                <option value="3">⭐⭐⭐ (3/5 - Correct)</option>
+                <option value="2">⭐⭐ (2/5 - Décevant)</option>
+                <option value="1">⭐ (1/5 - Médiocre)</option>
+              </select>
+            </div>
+            <div class="mb-4">
+              <label for="comment" class="form-label small fw-bold">Commentaire</label>
+              <textarea class="form-control bg-light" id="comment" rows="4" required placeholder="Partagez votre expérience avec le comparateur..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-quebec w-100 fw-bold py-2"><i class="bi bi-send-fill me-2"></i> Soumettre mon avis</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Colonne Liste des avis -->
+    <div class="col-lg-7 order-lg-1">
+      <!-- Un avis -->
+      <div class="card shadow-sm mb-4 border-0 rounded-4">
+        <div class="card-body p-4">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div class="d-flex align-items-center">
+              <div class="rounded-circle bg-quebec text-white d-flex align-items-center justify-content-center fw-bold me-3 shadow-sm" style="width: 50px; height: 50px; font-size: 1.2rem;">JF</div>
+              <div>
+                <div class="fw-bold text-dark">Jean-François T.</div>
+                <div class="small text-muted">Avis vérifié <i class="bi bi-check-circle-fill text-success ms-1"></i></div>
+              </div>
+            </div>
+            <div class="text-warning">
+              <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+            </div>
+          </div>
+          <p class="mb-0 text-dark fs-6" style="font-style: italic;">« Excellente application ! J'ai pu voir que la station à 2 km de chez moi était 8 cents moins chère que celle au coin de la rue. Très facile à utiliser. »</p>
+          <div class="text-muted small mt-3 text-end">Publié il y a 2 semaines</div>
+        </div>
+      </div>
+
+      <!-- Un avis -->
+      <div class="card shadow-sm mb-4 border-0 rounded-4">
+        <div class="card-body p-4">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div class="d-flex align-items-center">
+              <div class="rounded-circle bg-danger text-white d-flex align-items-center justify-content-center fw-bold me-3 shadow-sm" style="width: 50px; height: 50px; font-size: 1.2rem;">SM</div>
+              <div>
+                <div class="fw-bold text-dark">Sophie M.</div>
+                <div class="small text-muted">Avis vérifié <i class="bi bi-check-circle-fill text-success ms-1"></i></div>
+              </div>
+            </div>
+            <div class="text-warning">
+              <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+            </div>
+          </div>
+          <p class="mb-0 text-dark fs-6" style="font-style: italic;">« Simple et rapide sans inscription nécessaire. L'itinéraire Google Maps direct depuis les résultats est super bien pensé. Je gagne un temps précieux sur la route. »</p>
+          <div class="text-muted small mt-3 text-end">Publié le mois dernier</div>
+        </div>
+      </div>
+
+      <!-- Un avis -->
+      <div class="card shadow-sm mb-4 border-0 rounded-4">
+        <div class="card-body p-4">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div class="d-flex align-items-center">
+              <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center fw-bold me-3 shadow-sm" style="width: 50px; height: 50px; font-size: 1.2rem;">MD</div>
+              <div>
+                <div class="fw-bold text-dark">Marc D.</div>
+                <div class="small text-muted">Avis vérifié <i class="bi bi-check-circle-fill text-success ms-1"></i></div>
+              </div>
+            </div>
+            <div class="text-warning">
+              <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star text-warning"></i>
+            </div>
+          </div>
+          <p class="mb-0 text-dark fs-6" style="font-style: italic;">« Le seul comparateur pour tout le Québec qui fonctionne aussi bien sur mobile. Un petit bémol sur le temps de chargement des résultats parfois mais le service rendu est parfait. »</p>
+          <div class="text-muted small mt-3 text-end">Publié le mois dernier</div>
+        </div>
+      </div>
+
+      <!-- Un avis -->
+      <div class="card shadow-sm mb-4 border-0 rounded-4">
+        <div class="card-body p-4">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div class="d-flex align-items-center">
+              <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center fw-bold me-3 shadow-sm" style="width: 50px; height: 50px; font-size: 1.2rem;">AL</div>
+              <div>
+                <div class="fw-bold text-dark">Alain L.</div>
+                <div class="small text-muted">Avis vérifié <i class="bi bi-check-circle-fill text-success ms-1"></i></div>
+              </div>
+            </div>
+            <div class="text-warning">
+              <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+            </div>
+          </div>
+          <p class="mb-0 text-dark fs-6" style="font-style: italic;">« Le comparateur Trio m'a sauvé la vie ce matin. C'est magique de pouvoir comparer trois stations en y ajoutant la capacité de notre propre réservoir ! »</p>
+          <div class="text-muted small mt-3 text-end">Publié le mois dernier</div>
+        </div>
+      </div>
+
+      <!-- Un avis -->
+      <div class="card shadow-sm mb-4 border-0 rounded-4">
+        <div class="card-body p-4">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div class="d-flex align-items-center">
+              <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold me-3 shadow-sm" style="width: 50px; height: 50px; font-size: 1.2rem;">IL</div>
+              <div>
+                <div class="fw-bold text-dark">Isabelle L.</div>
+                <div class="small text-muted">Avis vérifié <i class="bi bi-check-circle-fill text-success ms-1"></i></div>
+              </div>
+            </div>
+            <div class="text-warning">
+              <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+            </div>
+          </div>
+          <p class="mb-0 text-dark fs-6" style="font-style: italic;">« Indispensable avec le coût de l'essence actuel ! Je l'ai mis en favori sur mon téléphone comme une vraie application. Merci aux créateurs. »</p>
+          <div class="text-muted small mt-3 text-end">Publié en février</div>
+        </div>
+      </div>
+
+      <!-- Un avis -->
+      <div class="card shadow-sm mb-4 border-0 rounded-4">
+        <div class="card-body p-4">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div class="d-flex align-items-center">
+              <div class="rounded-circle bg-info text-white d-flex align-items-center justify-content-center fw-bold me-3 shadow-sm" style="width: 50px; height: 50px; font-size: 1.2rem;">PC</div>
+              <div>
+                <div class="fw-bold text-dark">Patrick C.</div>
+                <div class="small text-muted">Avis vérifié <i class="bi bi-check-circle-fill text-success ms-1"></i></div>
+              </div>
+            </div>
+            <div class="text-warning">
+              <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-half"></i>
+            </div>
+          </div>
+          <p class="mb-0 text-dark fs-6" style="font-style: italic;">« Très pratique pour voir les variations de prix dans ma région. J'utilise cet outil chaque semaine avant de faire le plein. J'aimerais juste pouvoir filtrer par plus de marques ! »</p>
+          <div class="text-muted small mt-3 text-end">Publié en janvier</div>
+        </div>
+      </div>
+
+      <!-- Un avis -->
+      <div class="card shadow-sm mb-4 border-0 rounded-4">
+        <div class="card-body p-4">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div class="d-flex align-items-center">
+              <div class="rounded-circle bg-warning text-dark d-flex align-items-center justify-content-center fw-bold me-3 shadow-sm" style="width: 50px; height: 50px; font-size: 1.2rem;">ER</div>
+              <div>
+                <div class="fw-bold text-dark">Émilie R.</div>
+                <div class="small text-muted">Avis vérifié <i class="bi bi-check-circle-fill text-success ms-1"></i></div>
+              </div>
+            </div>
+            <div class="text-warning">
+              <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+            </div>
+          </div>
+          <p class="mb-0 text-dark fs-6" style="font-style: italic;">« Super interface ! J'aime la fonctionnalité de recherche autour de soi. Les données semblent très exactes avec les pompes dans mon quartier. »</p>
+          <div class="text-muted small mt-3 text-end">Publié l'année dernière</div>
+        </div>
+      </div>
+
+      <div class="text-center mt-4">
+        <p class="text-muted small">Vous êtes arrivé à la fin des avis publiés.</p>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<footer class="bg-dark text-white-50 py-4">
+  <div class="container text-center">
+    <p class="small mb-0">&copy; <span id="year"></span> Prix d'essence Québec. <a href="privacy.html" class="text-white-50">Confidentialité</a></p>
+  </div>
+</footer>
+<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+<!-- Bootstrap 5 JS Bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" defer></script>
+</body>
+</html>

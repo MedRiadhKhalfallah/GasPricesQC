@@ -33,6 +33,32 @@
           "type": "image/svg+xml"
         }
       ]
+    },
+    {
+      "name": "Carte interactive des prix",
+      "short_name": "Carte",
+      "description": "Voir les prix d'essence directement sur une carte interactive du Québec",
+      "url": "/carte.html",
+      "icons": [
+        {
+          "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🗺️</text></svg>",
+          "sizes": "any",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "Avis des utilisateurs",
+      "short_name": "Avis",
+      "description": "Lire et laisser un avis sur le comparateur de prix d'essence Québec",
+      "url": "/avis.html",
+      "icons": [
+        {
+          "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⭐</text></svg>",
+          "sizes": "any",
+          "type": "image/svg+xml"
+        }
+      ]
     }
   ]
 }
