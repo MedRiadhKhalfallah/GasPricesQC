@@ -468,7 +468,7 @@ async function search() {
   }
 }
 
-// ── Comparateur Top 3 ─────────────────────────���────────────────
+// ── Comparateur Top 3 ─────────────────────────────────────────
 window.updateDiscount = function(index) {
   const dPL = Number.parseFloat(document.getElementById(`discountPerLiter_${index}`).value) || 0;
   const fD = Number.parseFloat(document.getElementById(`fixedDiscount_${index}`).value) || 0;
@@ -562,43 +562,61 @@ function renderComparator() {
   };
 
   const buildMobileHtml = () => {
-    let h = '<div class="row flex-nowrap overflow-auto pb-3 g-3" style="scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;">';
+    let h = '<div class="d-flex flex-column gap-3 pb-3">';
     comparatorStations.forEach((s, i) => {
       const total = totals[i];
       const diff = (total - bestTotal).toFixed(2);
       const dPL = s.dPL || 0; const fD = s.fD || 0;
       const priceText = dPL > 0
         ? `<del class="text-danger small">${s.price.toFixed(1)}</del> <strong class="text-success fs-5">${Math.max(0, s.price - dPL).toFixed(1)}</strong>`
-        : s.price.toFixed(1);
+        : `<strong class="fs-5">${s.price.toFixed(1)}</strong>`;
       const cardStyle = diff === "0.00"
         ? 'border:2px solid #198754;background-color:#f8fff9;'
         : 'background-color:#fff;border:1px solid #dee2e6;';
-      const diffBadge = diff === "0.00"
-        ? '<span class="badge bg-success rounded-pill px-3 py-2 shadow-sm"><i class="bi bi-tag-fill me-1"></i> Économique</span>'
-        : `<span class="badge bg-danger rounded-pill px-3 py-2 shadow-sm text-white"><i class="bi bi-arrow-up-right me-1"></i> + ${diff} $</span>`;
+      const indicator = diff === "0.00"
+        ? '<span class="badge bg-success rounded-pill px-3 py-1 shadow-sm"><i class="bi bi-check-circle-fill me-1"></i> Meilleur choix</span>'
+        : `<span class="badge bg-danger rounded-pill px-3 py-1 shadow-sm text-white"><i class="bi bi-arrow-up text-white me-1"></i> +${diff}$</span>`;
+
       h += `
-        <div class="col-10 col-md-5 col-lg-4" style="scroll-snap-align:center;min-width:280px;">
-          <div class="p-4 rounded-4 shadow-sm h-100 d-flex flex-column justify-content-between position-relative" style="${cardStyle}">
-            <button type="button" class="btn-close position-absolute top-0 end-0 m-3" aria-label="Retirer" onclick="removeStation(${i})"></button>
-            <div class="mb-3">
-              <div class="text-truncate fw-bold fs-5 text-dark" title="${s.Name}">${s.Name||'Station'}</div>
-              <div class="small text-muted bg-light border px-2 py-1 rounded d-inline-block mt-1">${s.brand||'—'}</div>
+        <div class="card p-3 shadow-sm rounded-4 position-relative" style="${cardStyle}">
+          <button type="button" class="btn-close position-absolute top-0 end-0 m-3" aria-label="Retirer" onclick="removeStation(${i})"></button>
+          
+          <div class="d-flex align-items-center mb-2 pr-4">
+            <div class="rounded-circle bg-light text-dark d-flex justify-content-center align-items-center border me-3" style="width: 40px; height: 40px; font-weight: bold; flex-shrink: 0;">${i+1}</div>
+            <div class="overflow-hidden">
+              <h6 class="fw-bold mb-0 text-truncate text-dark" title="${s.Name}">${s.Name || 'Station'}</h6>
+              <div class="small text-muted text-truncate">${s.brand || '—'}</div>
             </div>
-            <div class="text-center mb-4 mt-2">
-              <div class="text-dark fw-black mb-1" style="font-size:2.80rem;font-weight:900;line-height:1;">${total.toFixed(2)}<span class="fs-4 text-muted ms-1">$</span></div>
-              <div class="text-muted fw-bold">${priceText} <span class="small">¢/L</span></div>
+          </div>
+
+          <div class="d-flex justify-content-between align-items-center mb-3 p-2 bg-white rounded border">
+            <div>
+              <div class="text-muted small fw-bold">Prix au litre</div>
+              <div>${priceText} <span class="small">¢/L</span></div>
             </div>
-            <div class="text-center mb-4">${diffBadge}</div>
-            <div class="bg-white rounded-3 p-3 border">
-              <div class="row g-2 text-start">
-                <div class="col-6">
-                  <label for="dpl_m_${i}" class="form-label small fw-bold text-muted mb-1"><i class="bi bi-tag-fill text-primary me-1"></i> Rabais</label>
-                  <input type="number" id="dpl_m_${i}" class="form-control form-control-sm text-center fw-bold bg-light border-0" value="${dPL}" min="0" step="0.1" oninput="syncDiscount(${i},'dpl_m_${i}','fpd_m_${i}')">
-                </div>
-                <div class="col-6">
-                  <label for="fpd_m_${i}" class="form-label small fw-bold text-muted mb-1"><i class="bi bi-cash-stack text-success me-1"></i> Prime</label>
-                  <input type="number" id="fpd_m_${i}" class="form-control form-control-sm text-center fw-bold bg-light border-0" value="${fD}" min="0" step="0.25" oninput="syncDiscount(${i},'dpl_m_${i}','fpd_m_${i}')">
-                </div>
+            <div class="text-end">
+              <div class="text-muted small fw-bold">Total (${capacity}L)</div>
+              <div class="text-dark fw-black" style="font-size:1.8rem; line-height:1;">${total.toFixed(2)}<span class="fs-5 text-muted">$</span></div>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div>${indicator}</div>
+          </div>
+
+          <div class="row g-2">
+            <div class="col-6">
+              <label for="dpl_m_${i}" class="form-label small fw-bold text-muted mb-1"><i class="bi bi-tag-fill text-primary"></i> Rabais</label>
+              <div class="input-group input-group-sm">
+                <input type="number" id="dpl_m_${i}" class="form-control text-center fw-bold bg-light" value="${dPL}" min="0" step="0.1" oninput="syncDiscount(${i},'dpl_m_${i}','fpd_m_${i}')">
+                <span class="input-group-text bg-light border-start-0 text-muted">¢</span>
+              </div>
+            </div>
+            <div class="col-6">
+              <label for="fpd_m_${i}" class="form-label small fw-bold text-muted mb-1"><i class="bi bi-cash-stack text-success"></i> Prime</label>
+              <div class="input-group input-group-sm">
+                <span class="input-group-text bg-light border-end-0 text-muted">$</span>
+                <input type="number" id="fpd_m_${i}" class="form-control text-center fw-bold bg-light" value="${fD}" min="0" step="0.25" oninput="syncDiscount(${i},'dpl_m_${i}','fpd_m_${i}')">
               </div>
             </div>
           </div>
@@ -609,7 +627,9 @@ function renderComparator() {
   };
 
   if (bodyDesktop) bodyDesktop.innerHTML = buildDesktopHtml();
-  if (bodyMobile) bodyMobile.innerHTML = buildMobileHtml();
+  if (bodyMobile) {
+    bodyMobile.innerHTML = buildMobileHtml();
+  }
 }
 
 // Synchronise les deux instances de champs (desktop + mobile) simultanément
@@ -620,69 +640,91 @@ window.syncDiscount = function(index, dplId, fpdId) {
     comparatorStations[index].dPL = Math.max(0, dPL);
     comparatorStations[index].fD  = Math.max(0, fD);
   }
+
+  // Get active element to restore focus
+  const activeElId = document.activeElement ? document.activeElement.id : null;
+  const selectionStart = document.activeElement && document.activeElement.selectionStart ? document.activeElement.selectionStart : null;
+  const selectionEnd = document.activeElement && document.activeElement.selectionEnd ? document.activeElement.selectionEnd : null;
+
   renderComparator();
+
+  if (activeElId) {
+    const el = document.getElementById(activeElId);
+    if (el) {
+      el.focus();
+      if (selectionStart !== null && selectionEnd !== null) {
+        el.setSelectionRange(selectionStart, selectionEnd);
+      }
+    }
+  }
 };
 
-// Compat anciens appels depuis oninput legacy
-window.updateDiscount = function(index) { renderComparator(); };
-
-document.getElementById('tankCapacity').addEventListener('input', renderComparator);
-
-// ── Modal Ajout de Station ────���─────────────────────────────────
-const addStationModalEl = document.getElementById('addStationModal');
-addStationModalEl.addEventListener('show.bs.modal', renderModalList);
-document.getElementById('modalBrandFilter').addEventListener('input', renderModalList);
-
-function renderModalList() {
-  const filterText = document.getElementById('modalBrandFilter').value.trim().toLowerCase();
-  const list = document.getElementById('modalStationsList');
-  list.innerHTML = '';
-
-  // On exclut les stations déjà dans le comparateur
-  const inComparatorIds = comparatorStations.map(s => s.id || s.Name + s.Address);
-  const available = currentStations.filter(s => !inComparatorIds.includes(s.id || s.Name + s.Address));
-
-  const filtered = available.filter(s => {
-    if(!filterText) return true;
-    return (s.Name || '').toLowerCase().includes(filterText) || (s.brand || '').toLowerCase().includes(filterText);
-  });
-
-  if (filtered.length === 0) {
-    list.innerHTML = '<div class="text-muted p-3 text-center">Aucune station disponible à ajouter.</div>';
-    return;
-  }
-
-  filtered.forEach(s => {
+// ── Ajout de stations dans le comparateur (Modal) ────────────────
+function renderModalStations(filterText = '') {
+  const listElement = document.getElementById('modalStationsList');
+  if(!listElement) return;
+  listElement.innerHTML = '';
+  
+  const pattern = new RegExp(filterText, 'i');
+  
+  currentStations.forEach((s) => {
+    // Ne pas afficher si déjà dans le comparateur
+    if (comparatorStations.find(c => c.Name === s.Name && c.distance_km === s.distance_km && c.price === s.price)) {
+      return;
+    }
+    if (filterText && !pattern.test(s.brand || '') && !pattern.test(s.Name || '')) {
+      return;
+    }
+    
     const btn = document.createElement('button');
-    btn.className = 'list-group-item list-group-item-action d-flex justify-content-between align-items-center mb-2 rounded-4 border shadow-sm p-3 hover-menu';
-    btn.style.minHeight = '60px'; // Accessibilité (Zone > 44px)
-
-    // Créer deux lettres pour le logo
-    const initial = (s.brand || s.Name || 'S').substring(0, 2).toUpperCase();
-
+    btn.type = 'button';
+    btn.className = 'list-group-item list-group-item-action d-flex justify-content-between align-items-center mb-1 rounded';
     btn.innerHTML = `
-      <div class="d-flex align-items-center overflow-hidden w-75">
-        <div class="rounded-circle bg-quebec text-white d-flex align-items-center justify-content-center fw-bold me-3 flex-shrink-0" style="width: 45px; height: 45px; font-size: 1rem;">${initial}</div>
-        <div class="pe-2 text-truncate text-start">
-          <div class="fw-bold text-dark text-truncate">${s.Name || 'Station'}</div>
-          <div class="small text-muted d-flex align-items-center"><i class="bi bi-car-front-fill me-1"></i> ${s.distance_km} km</div>
-        </div>
+      <div>
+        <div class="fw-bold">${s.Name || 'Station inconnue'}</div>
+        <div class="small text-muted">${s.brand || '—'} · ${s.distance_km} km</div>
       </div>
-      <div class="text-end ps-2">
-        <div class="fw-black text-dark" style="font-size: 1.4rem; font-weight: 900;">${s.price.toFixed(1)}<span class="small text-muted" style="font-size: 0.8rem;">¢</span></div>
-        <span class="badge bg-light text-dark border px-2 py-1 mt-1">${s.brand || '—'}</span>
-      </div>
+      <div class="fw-bold text-success">${s.price.toFixed(1)} <span class="small">¢/L</span></div>
     `;
-
-    btn.onclick = () => {
+    btn.addEventListener('click', () => {
       comparatorStations.push({...s, dPL: 0, fD: 0});
       renderComparator();
-      const modal = bootstrap.Modal.getInstance(addStationModalEl);
-      modal.hide();
-    };
-    list.appendChild(btn);
+      const modalEl = document.getElementById('addStationModal');
+      const modal = bootstrap.Modal.getInstance(modalEl);
+      if(modal) modal.hide();
+    });
+    listElement.appendChild(btn);
+  });
+  
+  if (listElement.innerHTML === '') {
+    listElement.innerHTML = '<div class="text-center text-muted p-3">Aucune station disponible à ajouter.</div>';
+  }
+}
+
+const addStationModalEl = document.getElementById('addStationModal');
+if (addStationModalEl) {
+  addStationModalEl.addEventListener('show.bs.modal', () => {
+    const filterInput = document.getElementById('modalBrandFilter');
+    if(filterInput) filterInput.value = '';
+    renderModalStations();
   });
 }
+
+const modalBrandFilterEl = document.getElementById('modalBrandFilter');
+if (modalBrandFilterEl) {
+  modalBrandFilterEl.addEventListener('input', (e) => {
+    renderModalStations(e.target.value);
+  });
+}
+
+// Compat anciens appels depuis oninput legacy
+window.updateDiscount = function() { renderComparator(); };
+
+document.getElementById('tankCapacity').addEventListener('input', renderComparator);
+if(document.getElementById('tankCapacityMob')) document.getElementById('tankCapacityMob').addEventListener('input', () => {
+  document.getElementById('tankCapacity').value = document.getElementById('tankCapacityMob').value;
+  renderComparator();
+});
 
 // ── Synchronisation filtres mobile ↔ desktop ───────────────────
 function syncMobToDesktop() {
@@ -713,10 +755,22 @@ function syncDesktopToMob() {
   });
 }
 
+let filterDebounceTimer;
+
 ['gasTypeMob', 'radiusMob', 'brandFilterMob', 'maxResultsMob'].forEach(id => {
   const el = document.getElementById(id);
-  if (el) el.addEventListener('change', syncMobToDesktop);
-  if (el) el.addEventListener('input', syncMobToDesktop);
+  if (el) {
+    el.addEventListener('change', () => {
+      syncMobToDesktop();
+      clearTimeout(filterDebounceTimer);
+      filterDebounceTimer = setTimeout(search, 300);
+    });
+    el.addEventListener('input', () => {
+      syncMobToDesktop();
+      clearTimeout(filterDebounceTimer);
+      filterDebounceTimer = setTimeout(search, 500);
+    });
+  }
 });
 
 ['gasType', 'radius', 'brandFilter', 'maxResults'].forEach(id => {
@@ -725,9 +779,6 @@ function syncDesktopToMob() {
   if (el) el.addEventListener('input', syncDesktopToMob);
 });
 
-// Bouton Rechercher mobile
-const btnSearchMob = document.getElementById('btnSearchMob');
-if (btnSearchMob) btnSearchMob.addEventListener('click', () => { syncMobToDesktop(); search(); });
 
 // Lancer la géolocalisation automatiquement au chargement (qui lancera ensuite search)
 initGeolocation();
