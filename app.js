@@ -245,11 +245,14 @@ async function initGeolocation() {
     userLng = prefs.lng;
     userCity = prefs.city;
 
-    // Restaurer les filtres dans l'interface
+    // Restaurer les filtres dans l'interface (desktop)
     if (prefs.radius) document.getElementById('radius').value = prefs.radius;
     if (prefs.max) document.getElementById('maxResults').value = prefs.max;
     if (prefs.gasType) document.getElementById('gasType').value = prefs.gasType;
     if (prefs.brand) document.getElementById('brandFilter').value = prefs.brand;
+
+    // Synchroniser les filtres desktop vers mobile
+    syncDesktopToMob();
 
     updateLocationInfo();
     setStatus('<div class="alert alert-success py-2">✅ Position et filtres restaurés !</div>');
@@ -777,6 +780,21 @@ let filterDebounceTimer;
   const el = document.getElementById(id);
   if (el) el.addEventListener('change', syncDesktopToMob);
   if (el) el.addEventListener('input', syncDesktopToMob);
+});
+
+// Touche Entrée sur les champs texte/nombre desktop et mobile → lancer la recherche
+['brandFilter', 'radius', 'maxResults', 'brandFilterMob', 'radiusMob', 'maxResultsMob'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) {
+    el.addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        syncMobToDesktop();
+        clearTimeout(filterDebounceTimer);
+        search();
+      }
+    });
+  }
 });
 
 
