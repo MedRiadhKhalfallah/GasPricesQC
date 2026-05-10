@@ -109,38 +109,6 @@ Autres   : ~5%
 
 ---
 
-## 📊 Composition du projet
-
-```
-GasPricesQC/
-├── index.html           # Page principale (accueil)
-├── carte.html           # Page de la carte interactive
-├── avis.html            # Page des avis utilisateurs
-├── privacy.html         # Politique de confidentialité
-├── app.js               # Logique applicative principale
-├── manifest.json        # PWA manifest
-├── style.css            # Styles personnalisés (optionnel)
-└── README.md            # Ce fichier
-```
-
-### Fichiers clés
-
-**index.html**
-- Point d'entrée principal
-- Structure complète avec modales, filtres, comparateur
-- JSON-LD Schema markup pour SEO (E-E-A-T)
-
-**app.js**
-- Gestion de la géolocalisation
-- Récupération et tri des données de stations
-- Interactions utilisateur & filtrage
-- Comparateur de plein
-- Gestion des cartes Leaflet
-
-**manifest.json**
-- Configuration PWA pour installation sur écran d'accueil
-- Icônes, splash screens, couleurs de thème
-
 ---
 
 ## 🎯 Utilisation
@@ -269,12 +237,6 @@ NON, jamais. La géolocalisation est traitée **localement dans votre navigateur
 Absolument ! Créez une **issue** ou **pull request** dans le repo GitHub.
 
 ---
-
-## 💰 Modèle économique
-
-**Revenus** : Google AdSense (publicités non-intrusives)  
-**Coûts** : Hébergement Vercel gratuit (tier étudiant/makers)  
-**Objectif** : Rester gratuit pour tous les utilisateurs
 
 ---
 
